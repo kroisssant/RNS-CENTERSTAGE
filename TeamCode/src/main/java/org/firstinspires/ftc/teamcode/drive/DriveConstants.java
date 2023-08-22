@@ -36,6 +36,9 @@ public class DriveConstants {
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
+    //  THIS ARE FOR FTCLIB RAMSETE CONTROLLER
+    public static double B = 2.0;
+    public static double ZETA = 0.7;
     /*
      * These are physical constants that can be determined from your robot (including the track
      * width; it will be tune empirically later although a rough estimate is important). Users are
@@ -45,8 +48,12 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 2; // in
+    public static double WHEEL_DIAMETER = WHEEL_RADIUS * 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
     public static double TRACK_WIDTH = 1; // in
+
+    // FTCLIB
+    public static double DISTANCE_PER_PULSE = WHEEL_DIAMETER * Math.PI / TICKS_PER_REV;
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -65,6 +72,8 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
+
+    // MAX_VEL AND MAX_ACCEL ARE USED AS MAX_VELOCITY AND MAX_ACCELEATION IN FTCLIB
     public static double MAX_VEL = 30;
     public static double MAX_ACCEL = 30;
     public static double MAX_ANG_VEL = Math.toRadians(60);
