@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
+import com.arcrobotics.ftclib.geometry.Translation2d;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /*
@@ -78,6 +83,26 @@ public class DriveConstants {
     public static double MAX_ACCEL = 30;
     public static double MAX_ANG_VEL = Math.toRadians(60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
+
+    public static TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(MAX_VEL, MAX_ACCEL);
+
+    public static PIDCoefficients xPIDCoef = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients yPIDCoef = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients thetaPIDCoef = new PIDCoefficients(0, 0, 0);
+
+    public static PIDController xPID = new PIDController(xPIDCoef.p, xPIDCoef.d, xPIDCoef.i);
+    public static PIDController yPID = new PIDController(yPIDCoef.p, yPIDCoef.d, yPIDCoef.i);
+    public static ProfiledPIDController thetaPID= new ProfiledPIDController(thetaPIDCoef.p, thetaPIDCoef.d,
+            thetaPIDCoef.i, constraints);
+
+    public static Translation2d m_frontLeftLocation =
+            new Translation2d(0.1981, 0.1981);
+    public static Translation2d m_frontRightLocation =
+            new Translation2d(0.1981, -0.1981);
+    public static Translation2d m_backLeftLocation =
+            new Translation2d(-0.1981, 0.1981);
+    public static Translation2d m_backRightLocation =
+            new Translation2d(-0.1981, -0.1981);
 
     /*
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.
