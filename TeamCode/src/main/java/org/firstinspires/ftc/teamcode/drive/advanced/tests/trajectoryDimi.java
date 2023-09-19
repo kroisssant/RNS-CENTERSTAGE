@@ -2,16 +2,11 @@ package org.firstinspires.ftc.teamcode.drive.advanced.tests;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.MecanumControllerCommand;
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveWheelSpeeds;
-import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumOdoKinematics;
 import com.arcrobotics.ftclib.trajectory.Trajectory;
 import com.arcrobotics.ftclib.trajectory.TrajectoryGenerator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -25,7 +20,7 @@ import java.util.Arrays;
 public class trajectoryDimi extends CommandOpMode {
 
     private Motor frontLeft, frontRight, backLeft, backRight;
-    private RevIMU imu;
+//    private RevIMU imu;
     private MecanumControllerCommand mecanumFollower;
 
 
@@ -37,12 +32,13 @@ public class trajectoryDimi extends CommandOpMode {
         frontRight = new Motor(hardwareMap, "rightFront");
         backLeft = new Motor(hardwareMap, "leftRear");
         backRight = new Motor(hardwareMap, "rightRear");
-        imu = new RevIMU(hardwareMap);
+//        imu = new RevIMU(hardwareMap);
 
         drive = new MecanumDriveBase(false,
                 frontLeft, frontRight,
                 backLeft, backRight,
-                imu, DriveConstants.m_frontLeftLocation,
+                // imu,
+                DriveConstants.m_frontLeftLocation,
                 DriveConstants.m_frontRightLocation, DriveConstants.m_backLeftLocation,
                 DriveConstants.m_backRightLocation);
 
@@ -56,6 +52,13 @@ public class trajectoryDimi extends CommandOpMode {
                 // Pass config
                 drive.getConfig()
         );
+
+
+
+        for(int i = 0; i < exampleTrajectory.getStates().size(); i++) {
+            System.out.println(exampleTrajectory.getStates().get(i));
+        }
+
         mecanumFollower = new MecanumControllerCommand(exampleTrajectory,
                 drive::getPosition, drive.getKinematics(),
                 DriveConstants.xPID,

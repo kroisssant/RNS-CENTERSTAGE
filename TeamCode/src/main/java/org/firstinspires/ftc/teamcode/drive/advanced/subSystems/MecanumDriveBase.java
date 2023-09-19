@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 public class MecanumDriveBase extends SubsystemBase {
     ElapsedTime timer;
     public Motor frontLeft, frontRight, backLeft, backRight;
-    public RevIMU imu;
+    // public RevIMU imu;
     public MecanumControllerCommand mecanumFollower;
     private MecanumDrive mecanumDrive;
     public MecanumDriveKinematics mcKinematics;
@@ -42,14 +42,15 @@ public class MecanumDriveBase extends SubsystemBase {
     public MecanumDriveBase(boolean autoInvert,
                             Motor frontLeft, Motor frontRight,
                             Motor backLeft, Motor backRight,
-                            RevIMU imu, Translation2d m_frontLeftLocation,
+//                            RevIMU imu,
+                            Translation2d m_frontLeftLocation,
                             Translation2d m_frontRightLocation,Translation2d m_backLeftLocation,
                             Translation2d m_backRightLocation) {
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
         this.backLeft = backLeft;
         this.backRight = backRight;
-        this.imu = imu;
+        // this.imu = imu;
         this.m_frontLeftLocation = m_frontLeftLocation;
         this.m_frontRightLocation = m_frontRightLocation;
         this.m_backLeftLocation = m_backLeftLocation;
@@ -60,15 +61,16 @@ public class MecanumDriveBase extends SubsystemBase {
         mcWheelSpeeds = new MecanumDriveWheelSpeeds(frontLeft.getCorrectedVelocity(),
                 frontRight.getCorrectedVelocity(),
                 backLeft.getCorrectedVelocity(), backRight.getCorrectedVelocity());
-        mcOdo = new MecanumDriveOdometry(mcKinematics, imu.getRotation2d());
+//        mcOdo = new MecanumDriveOdometry(mcKinematics,
+//                imu.getRotation2d());
 
         this.config = new TrajectoryConfig(DriveConstants.MAX_VEL, DriveConstants.MAX_ACCEL)
                 .setKinematics(mcKinematics);
 
         timer = new ElapsedTime();
         timer.reset();
-        this.imu.init();
-        imu.init();
+//        this.imu.init();
+//        imu.init();
     }
 
 
@@ -76,7 +78,7 @@ public class MecanumDriveBase extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-        mcOdo.updateWithTime(timer.seconds(), imu.getRotation2d(), getWheelsSpeed());
+        // mcOdo.updateWithTime(timer.seconds(), imu.getRotation2d(), getWheelsSpeed());
     }
 
     public void drive(MecanumDriveWheelSpeeds speeds) {
