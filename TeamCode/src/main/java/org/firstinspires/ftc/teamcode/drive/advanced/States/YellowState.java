@@ -14,16 +14,18 @@ public class YellowState implements STATE {
     long startTime = 0;
     long endTime = 0;
     long allocatedTime = 0;
-    Trajectory toAllianceYellow;
     String name = "Yellow State";
     boolean finnished;
 
-    public void init(SampleMecanumDrive driven, Pose2d initPose) {
-        toAllianceYellow = drive.trajectoryBuilder(initPose).lineToLinearHeading(new Pose2d(69, 69, 69))
-                .build();
+    public void init(SampleMecanumDrive drive, Pose2d initPose) {
+        this.drive = drive;
     };
     public int periodic(int loopIndexer) {
-        drive.followTrajectory(toAllianceYellow);
+        drive.followTrajectory();
+        // activate intake
+        // transfer
+        drive.followTrajectory(to);
+
         finnished = true;
         return loopIndexer;};
     public boolean isFinnished() {return finnished;}
