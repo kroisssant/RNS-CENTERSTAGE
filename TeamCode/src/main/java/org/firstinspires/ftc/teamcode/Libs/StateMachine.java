@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.Libs;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.advanced.States.Trajectorys;
+
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,12 +14,18 @@ public class StateMachine{
         ArrayList<STATE> emStates = new ArrayList<>();
         STATE currentState;
         STATE nextState;
+        Trajectorys trajectorys;
+
+        SampleMecanumDrive drive;
         ElapsedTime timer;
         boolean emergency = false;
         int loopIndex;
 
-        public StateMachine(ElapsedTime time) {
+        public StateMachine(ElapsedTime time, SampleMecanumDrive drive, Trajectorys trajectorys) {
                 this.timer = time;
+                this.drive = drive;
+                this.trajectorys = trajectorys;
+                this.trajectorys.init();
         }
 
 
@@ -27,7 +36,7 @@ public class StateMachine{
                 else {
                         states.add(state);
                 }
-                state.init();
+                state.init(drive, trajectorys);
 
         }
 
