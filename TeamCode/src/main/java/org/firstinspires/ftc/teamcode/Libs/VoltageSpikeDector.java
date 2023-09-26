@@ -29,8 +29,8 @@ public class VoltageSpikeDector {
             ema = alpha * current + (1 - alpha) * ema;
 
             // Check if EMA voltage exceeds the threshold
-            if (ema > currentTreshhold) {
-                System.out.println("Voltage spike detected! EMA Voltage: " + ema + "V");
+            if (ema > ema+currentTreshhold) {
+                System.out.println("Current spike detected! EMA Amps: " + ema + "Amps");
                 return true;
                 // You can take appropriate action here, like stopping the motor or logging the event.
             }
