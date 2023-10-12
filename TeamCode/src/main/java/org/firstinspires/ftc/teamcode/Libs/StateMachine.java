@@ -12,8 +12,10 @@ import java.util.HashMap;
 public class StateMachine{
         ArrayList<STATE> states = new ArrayList<>();
         ArrayList<STATE> emStates = new ArrayList<>();
+
         STATE currentState;
         STATE nextState;
+
         Trajectorys trajectorys;
 
         SampleMecanumDrive drive;

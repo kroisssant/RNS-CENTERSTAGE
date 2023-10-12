@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.drive.advanced.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.vuforia.State;
 
 import org.firstinspires.ftc.teamcode.Libs.StateMachine;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
