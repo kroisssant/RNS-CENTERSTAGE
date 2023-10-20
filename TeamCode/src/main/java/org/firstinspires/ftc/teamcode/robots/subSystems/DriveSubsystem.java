@@ -9,7 +9,7 @@ import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveKinem
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveOdometry;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveWheelSpeeds;
 
-import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.robots.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
 

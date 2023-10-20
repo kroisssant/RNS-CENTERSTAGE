@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robots.subSystems;
 
+import static org.firstinspires.ftc.teamcode.robots.DriveConstants.TFOD_MODEL_ASSET;
+
 import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,21 +15,17 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 
 public class Vision {
-    private static final boolean USE_WEBCAM = true;
-    private static final String TFOD_MODEL_ASSET = "pixie FPNLITE.tflite";
-    // Define the labels recognized in the model for TFOD (must be in training order!)
-    private static final String[] LABELS = {
-            "pixie",
-    };
+
     private TfodProcessor tfod;
     private VisionPortal visionPortal;
 
     private Telemetry telemetry;
-    private HardwareMap hardwareMap;
+
+    boolean enable = true;
+
 
     public Vision(Telemetry telemetry, HardwareMap hardwareMap) {
         this.telemetry = telemetry;
-        this.hardwareMap = hardwareMap;
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
@@ -60,7 +58,7 @@ public class Vision {
                 .addProcessor(tfod)
                 .build();
         tfod.setMinResultConfidence(0.75f);
-        visionPortal.setProcessorEnabled(tfod, true);
+        visionPortal.setProcessorEnabled(tfod, enable);
 
     }   // end method initTfod()
 
@@ -71,7 +69,6 @@ public class Vision {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
-
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
@@ -84,4 +81,10 @@ public class Vision {
         }   // end for() loop
 
     }   // end method telemetryTfod()
+
+    public List<Recognition> getRecognitions() {
+        return tfod.getRecognitions();
+    }
+    public void disable() {enable = false;}
+    public void enable() {enable = true;}
 }

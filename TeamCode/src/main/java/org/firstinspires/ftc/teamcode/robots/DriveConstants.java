@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.drive;
+package org.firstinspires.ftc.teamcode.robots;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -8,6 +8,8 @@ import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 /*
  * Constants shared between multiple drive types.
@@ -70,7 +72,7 @@ public class DriveConstants {
     public static double kA = 0;
     public static double kStatic = 0;
 
-    // lock to constatns
+    // Drivetrain.class constants
     public static double kPxy = 0;
     public static double kPHeading = 0;
 
@@ -116,7 +118,9 @@ public class DriveConstants {
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
             RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
+    // Vision.class constatns
 
+    public static final String TFOD_MODEL_ASSET = "pixie FPNLITE.tflite";
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }

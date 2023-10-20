@@ -15,7 +15,7 @@ public class VisionTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive() && !isStopRequested()) {
-            
+            vision.getRecognitions();
         }
     }
 }
