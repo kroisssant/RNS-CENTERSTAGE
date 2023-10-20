@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.Libs;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.advanced.States.Trajectorys;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robots.States.Trajectorys;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class StateMachine{
         ArrayList<STATE> states = new ArrayList<>();

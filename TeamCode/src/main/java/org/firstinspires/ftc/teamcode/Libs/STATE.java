@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.Libs;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.advanced.States.Trajectorys;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robots.States.Trajectorys;
 
 public interface STATE {
     int loopIndexer = 0;
