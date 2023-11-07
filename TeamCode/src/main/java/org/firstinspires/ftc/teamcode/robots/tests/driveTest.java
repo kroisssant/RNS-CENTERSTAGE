@@ -20,6 +20,7 @@ public class driveTest extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         waitForStart();
         drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         while(opModeIsActive()) {
