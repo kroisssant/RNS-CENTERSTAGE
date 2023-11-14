@@ -253,7 +253,7 @@ public abstract class BroadcomImplCustom extends I2cDeviceSynchDeviceWithParamet
 
     @Override
     public synchronized int green() {
-        //updateColors();
+        updateColors();
         return this.green;
     }
 
