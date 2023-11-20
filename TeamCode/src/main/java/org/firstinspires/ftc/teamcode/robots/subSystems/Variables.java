@@ -5,10 +5,10 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class Variables {
-    public static double pressureDreaptaClose = 0;
-    public static double pressureDreaptaOpen = 0;
-    public static double pressureStangaClose = 0;
-    public static double pressureStangaOpen = 0;
+    public static double pressureDreaptaClose = 0.05;
+    public static double pressureDreaptaOpen = 0.17;
+    public static double pressureStangaClose = 0.05;
+    public static double pressureStangaOpen = 0.19;
 
     public static int glisieraGroud = 0;
     public static int glisieraLow = 0;
@@ -30,6 +30,6 @@ public class Variables {
     public static double dropdownUp = 0;
     public static double dropdownDown = 0;
 
-    public static double intakePower = 0.5;
+    public static double intakePower = 0.4;
     public static double intakeNopower = 0;
 }

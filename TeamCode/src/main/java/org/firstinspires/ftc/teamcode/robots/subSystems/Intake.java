@@ -29,7 +29,7 @@ public class Intake {
         intakeDreapta.setZeroPowerBehavior(zpb);
         intakeStanga.setZeroPowerBehavior(zpb);
     }
-    public int[] getTicks(){
+    public int[] getCurrentPos(){
         if(intakeStanga.getMode() == DcMotor.RunMode.RUN_USING_ENCODER && intakeDreapta.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
             return new int[]{intakeStanga.getCurrentPosition(), intakeDreapta.getCurrentPosition()};
         }

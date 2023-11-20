@@ -15,23 +15,23 @@ public class OutTake {
     Servo bratStanga, bratDreapta;
 
     public OutTake (HardwareMap hardwareMap) {
-        claw = hardwareMap.get(Servo.class, "claw");
+       // claw = hardwareMap.get(Servo.class, "claw");
 
         pressureDreapta = hardwareMap.get(Servo.class, "pressureDreapta");
         pressureStanga = hardwareMap.get(Servo.class, "pressureStanga");
         pressureStanga.setDirection(Servo.Direction.REVERSE);
 
-        bratDreapta = hardwareMap.get(Servo.class, "bratDreapta");
-        bratStanga = hardwareMap.get(Servo.class, "bratStanga");
-        bratStanga.setDirection(Servo.Direction.REVERSE);
+//        bratDreapta = hardwareMap.get(Servo.class, "bratDreapta");
+//        bratStanga = hardwareMap.get(Servo.class, "bratStanga");
+//        bratStanga.setDirection(Servo.Direction.REVERSE);
 
-        glisieraDreapta = hardwareMap.get(DcMotorEx.class, "glisieraDreapta");
-        glisieraStanga = hardwareMap.get(DcMotorEx.class, "glisieraStanga");
+//        glisieraDreapta = hardwareMap.get(DcMotorEx.class, "glisieraDreapta");
+//        glisieraStanga = hardwareMap.get(DcMotorEx.class, "glisieraStanga");
+//
+//        glisieraDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        glisieraStanga.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        glisieraDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        glisieraStanga.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        setZeroPowerBeh(DcMotor.ZeroPowerBehavior.BRAKE);
+     //   setZeroPowerBeh(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setZeroPowerBeh(DcMotorEx.ZeroPowerBehavior beh) {
