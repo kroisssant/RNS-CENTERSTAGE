@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robots.tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
 
 @TeleOp(name = "test slide", group = "test")
+@Disabled
 public class setPowerToMotor extends LinearOpMode {
     GAMEPAD gamepad;
     DcMotorEx motor1, motor2;

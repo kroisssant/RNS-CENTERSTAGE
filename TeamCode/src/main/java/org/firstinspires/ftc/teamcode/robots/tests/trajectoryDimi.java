@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.trajectory.Trajectory;
 import com.arcrobotics.ftclib.trajectory.TrajectoryGenerator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.robots.DriveConstants;
 import org.firstinspires.ftc.teamcode.robots.subSystems.MecanumDriveBase;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.robots.subSystems.MecanumDriveBase;
 import java.util.Arrays;
 
 @Autonomous
+@Disabled
 public class trajectoryDimi extends CommandOpMode {
 
     private Motor frontLeft, frontRight, backLeft, backRight;
