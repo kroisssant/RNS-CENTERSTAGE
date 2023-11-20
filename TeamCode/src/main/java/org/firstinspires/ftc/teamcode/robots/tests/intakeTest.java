@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
 
 @Config
-@Disabled
 @TeleOp(group = "test", name = "intakeTest")
 public class intakeTest extends LinearOpMode {
     Intake intake;
