@@ -27,12 +27,12 @@ public class fullMechanismTest extends LinearOpMode {
             GAMEPAD1.run();
             if(GAMEPAD1.right_bumper.value) {
                 outtake.setZeroPowerBeh(DcMotor.ZeroPowerBehavior.FLOAT);
-                outtake.setClawDreapta(Variables.pressureDreaptaClose);
-                outtake.setClawStanga(Variables.pressureStangaClose);
+                outtake.setPressureDreapta(Variables.pressureDreaptaClose);
+                outtake.setPressureStanga(Variables.pressureStangaClose);
                 outtake.setBrat(Variables.bratDefault);
                 outtake.setClaw(Variables.clawDefault);
 
-                intake.setDropdown(Variables.dropdownUp);
+//                intake.setDropdown(Variables.dropdownUp);
             }
             if(GAMEPAD1.left_bumper.value != false) {
                 intake.setPower(-1);

@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
     DcMotorEx intakeDreapta, intakeStanga;
-    MotorGroup intake;
+//    MotorGroup intake;
     Servo dropdown;
     public Intake(HardwareMap hardwareMap) {
         intakeDreapta = hardwareMap.get(DcMotorEx.class, "intakeDreapta");
         intakeStanga = hardwareMap.get(DcMotorEx.class, "intakeStanga");
         dropdown = hardwareMap.get(Servo.class, "dropdown");
-        intakeStanga.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeDreapta.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
     public void setPower(double power) {
