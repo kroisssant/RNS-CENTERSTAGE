@@ -19,14 +19,16 @@ public class teleopV1Main extends LinearOpMode {
 
     //Declaration of classes that wil be used in this teleop
     Intake intake;
+    int target = 0;
     OutTake outTake;
     GAMEPAD GAMEPAD1, GAMEPAD2; //1 chassis
     DriveTrain drive;
     ElapsedTime timerForGlisieraSus;
+    ElapsedTime timerForGlisieraJos;
 
-    boolean flagTimerRestart = false;
+    boolean pressureOpen = true;
+    boolean bratIsUp = false;
 
-    //state variables for the state machine
     STATES reqState = null;
     STATES robotState = STATES.DEFAULT;
 
@@ -37,6 +39,15 @@ public class teleopV1Main extends LinearOpMode {
         GAMEPAD2 = new GAMEPAD(this.gamepad2, telemetry);
         drive = new DriveTrain(hardwareMap, telemetry);
         timerForGlisieraSus = new ElapsedTime();
+        timerForGlisieraJos = new ElapsedTime();
+        intake = new Intake(hardwareMap);
+        outTake = new OutTake(hardwareMap);
+
+
+        outTake.setClaw(Variables.pivotJos);
+        outTake.setBrat(Variables.bratJos);
+        outTake.setPressureStanga(Variables.pressureStangaOpen);
+        outTake.setPressureDreapta(Variables.pressureDreaptaOpen);
 
         waitForStart();
 
@@ -44,6 +55,7 @@ public class teleopV1Main extends LinearOpMode {
             GAMEPAD1.run();
             GAMEPAD2.run();
 
+            intake();
             states();
 
             if(gamepad1.left_bumper) {
@@ -65,8 +77,30 @@ public class teleopV1Main extends LinearOpMode {
                 );
             }
             drive.update();
+
+            telemetry.addData("pressureOpen", pressureOpen);
+            telemetry.addData("target", outTake.glisieraDreapta.getTargetPosition());
+            telemetry.addData("current pos", outTake.getPosition());
+            telemetry.addData("reqState", reqState);
+            telemetry.addData("robotState", robotState);
+            telemetry.addData("TIMER", timerForGlisieraSus);
+            telemetry.update();
         }
 
+    }
+
+    private void intake(){
+        if(GAMEPAD2.right_trigger > 0.3){
+            intake.setPower(0.4);
+        } else if(GAMEPAD2.left_trigger > 0.3){
+            intake.setPower(-0.4);
+        } else if(GAMEPAD1.right_trigger > 0.3){
+            intake.setPower(0.4);
+        } else if(GAMEPAD1.left_trigger > 0.3){
+            intake.setPower(-0.4);
+        } else {
+            intake.setPower(0);
+        }
     }
 
     private void states() throws InterruptedException {
@@ -78,68 +112,59 @@ public class teleopV1Main extends LinearOpMode {
             reqState = STATES.HIGH;
         }
 
-        if (GAMEPAD1.right_bumper.toggle && reqState != null) {
+        if(GAMEPAD1.right_bumper.value && pressureOpen == true && robotState == STATES.DEFAULT){
+            outTake.setPressureDreapta(Variables.pressureDreaptaClose);
+            outTake.setPressureStanga(Variables.pressureStangaClose);
+            pressureOpen = false;
+        }
+
+        outTake.glisieraPos(target,Variables.supression, Variables.toleranta);
 
 
-            if(reqState != robotState){
-                flagTimerRestart = true;
-            } else flagTimerRestart = false;
-
-            if(flagTimerRestart == true){
-                timerForGlisieraSus.reset();
+        if (GAMEPAD1.right_bumper.value && reqState != null && pressureOpen == false) {
+            if(reqState == STATES.LOW) {
+                robotState = STATES.LOW;
+                if (bratIsUp == false) {
+                    timerForGlisieraSus.reset();
+                }
+                target = Variables.glisieraLow;
             }
-
-            switch (reqState) {
-                case LOW:
-                    outTake.run(Variables.glisieraPower, Variables.glisieraLow);
-                    if(timerForGlisieraSus.seconds() == Variables.timpDupaMiscareaGlisierei){
-                        outTake.setBrat(Variables.bratLow);
-                        outTake.setClaw(Variables.clawLow);
-                        pressure();
-                    }
-                    robotState = STATES.LOW;
-                    break;
-                case MID:
-                    outTake.run(Variables.glisieraPower, Variables.glisieraMid);
-                    if(timerForGlisieraSus.seconds() == Variables.timpDupaMiscareaGlisierei){
-                        outTake.setBrat(Variables.bratMid);
-                        outTake.setClaw(Variables.clawMid);
-                        pressure();
-                    }
-                    robotState = STATES.MID;
-                    break;
-                case HIGH:
-                    outTake.run(Variables.glisieraPower, Variables.glisieraHigh);
-                    if(timerForGlisieraSus.seconds() == Variables.timpDupaMiscareaGlisierei){
-                        outTake.setBrat(Variables.bratHigh);
-                        outTake.setClaw(Variables.clawHigh);
-                        pressure();
-                    }
+            if(reqState == STATES.MID) {
+                robotState = STATES.MID;
+                if (bratIsUp == false) {
+                    timerForGlisieraSus.reset();
+                }
+                target = Variables.glisieraMid;
+            }
+            if(reqState == STATES.HIGH){
                     robotState = STATES.HIGH;
-                    break;
-                default:
-                    break;
+                    if(bratIsUp == false){
+                        timerForGlisieraSus.reset();
+                    }
+                    target = Variables.glisieraHigh;
             }
-        } else if (!GAMEPAD1.right_bumper.toggle && robotState != STATES.DEFAULT) {
+
+        } else if(GAMEPAD1.right_bumper.value && pressureOpen == true && robotState!= STATES.DEFAULT && bratIsUp){
+            timerForGlisieraJos.reset();
+            outTake.setBrat(Variables.bratJos);
+            outTake.setClaw(Variables.pivotJos);
+            bratIsUp = false;
             reqState = robotState;
-//            outTake.run(Variables.glisieraPower, Variables.glisieraDown);
-//            outTake.setBrat(Variables.bratDefault);
-//            outTake.setClaw(Variables.clawDefault);
-            outTake.setPressureStanga(Variables.pressureStangaOpen);
-            outTake.setPressureDreapta(Variables.pressureDreaptaOpen);
-            robotState = STATES.DEFAULT;
         }
+        if(GAMEPAD1.right_bumper.value && pressureOpen == false && STATES.DEFAULT != robotState ){
+            outTake.setPressureDreapta(Variables.pressureDreaptaOpen);
+            outTake.setPressureStanga(Variables.pressureStangaOpen);
+            pressureOpen = true;
+        }
+
+        if(timerForGlisieraSus.seconds() >= 2  && !pressureOpen && !bratIsUp && STATES.DEFAULT != robotState){
+            outTake.setBrat(Variables.bratSus);
+            outTake.setClaw(Variables.pivotSus);
+            bratIsUp = true;
+        }
+
+
     }
 
-    public void pressure(){
-        if(GAMEPAD2.left_bumper.toggle){
-            if(outTake.getPressureDreapta() == Variables.pressureDreaptaClose){
-                outTake.setPressureDreapta(Variables.pressureDreaptaOpen);
-                outTake.setPressureStanga(Variables.pressureStangaOpen);
-            } else {
-                outTake.setPressureDreapta(Variables.pressureDreaptaClose);
-                outTake.setPressureStanga(Variables.pressureStangaClose);
-            }
-        }
-    }
+
 }

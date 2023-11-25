@@ -30,7 +30,7 @@ public class fullMechanismTest extends LinearOpMode {
                 outtake.setPressureDreapta(Variables.pressureDreaptaClose);
                 outtake.setPressureStanga(Variables.pressureStangaClose);
                 outtake.setBrat(Variables.bratDefault);
-                outtake.setClaw(Variables.clawDefault);
+//                outtake.setClaw(Variables.clawDefault);
 
 //                intake.setDropdown(Variables.dropdownUp);
             }

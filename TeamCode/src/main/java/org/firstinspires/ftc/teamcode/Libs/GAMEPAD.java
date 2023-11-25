@@ -175,7 +175,6 @@ public class GAMEPAD{
         }
     }
 
-
     private void updateMaturicaToggle(){
         if(x.toggle == true && (x.lastToggleTime > b.lastToggleTime)){
             b.toggle = false;

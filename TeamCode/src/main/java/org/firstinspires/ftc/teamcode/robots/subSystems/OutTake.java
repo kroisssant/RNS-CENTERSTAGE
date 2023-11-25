@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robots.subSystems;
 
+import static org.firstinspires.ftc.teamcode.robots.subSystems.Variables.toleranta;
+
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
@@ -32,6 +34,7 @@ public class OutTake {
 
         glisieraDreapta.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         glisieraStanga.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        glisieraDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         setZeroPowerBeh(DcMotor.ZeroPowerBehavior.BRAKE);
     }
@@ -67,33 +70,58 @@ public class OutTake {
         bratStanga.setPosition(pos);
     }
 
-    public void glisieraPos(){
-        if(glisieraDreapta.getCurrentPosition()>=Variables.target-Variables.toleranta && glisieraDreapta.getCurrentPosition()<=Variables.target+Variables.toleranta) {
+    public void glisieraPos(int target, int supress, int toleranta){
+        if(glisieraDreapta.getCurrentPosition()>=target-toleranta && glisieraDreapta.getCurrentPosition()<=target+toleranta) {
             glisieraDreapta.setPower(0);
             glisieraStanga.setPower(0);
-        }else if(glisieraDreapta.getCurrentPosition()>Variables.target-Variables.supression && glisieraDreapta.getCurrentPosition()<Variables.target-Variables.toleranta){
-            glisieraDreapta.setTargetPosition(Variables.target);
+        }else if(glisieraDreapta.getCurrentPosition()>target-supress && glisieraDreapta.getCurrentPosition()<target-toleranta){
+            glisieraDreapta.setTargetPosition(target);
             glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             glisieraDreapta.setPower(Variables.supress_pow * Variables.pow);
             glisieraStanga.setPower(Variables.supress_pow * glisieraDreapta.getPower() * Variables.multiplier_non_encoder * Variables.speed_control);
-        }else if(glisieraDreapta.getCurrentPosition()<Variables.target-Variables.supression && glisieraDreapta.getCurrentPosition()<Variables.target-Variables.toleranta){
-            glisieraDreapta.setTargetPosition(Variables.target);
+        }else if(glisieraDreapta.getCurrentPosition()<target-supress && glisieraDreapta.getCurrentPosition()<target-toleranta){
+            glisieraDreapta.setTargetPosition(target);
             glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             glisieraDreapta.setPower(Variables.pow);
             glisieraStanga.setPower(glisieraDreapta.getPower() * Variables.multiplier_non_encoder * Variables.speed_control);
-        }else if(glisieraDreapta.getCurrentPosition()<Variables.target+Variables.supression && glisieraDreapta.getCurrentPosition()>Variables.target+Variables.toleranta){
-            glisieraDreapta.setTargetPosition(Variables.target);
+        }else if(glisieraDreapta.getCurrentPosition()<target+supress && glisieraDreapta.getCurrentPosition()>target+toleranta){
+            glisieraDreapta.setTargetPosition(target);
             glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             glisieraDreapta.setPower(Variables.supress_pow * Variables.pow);
             glisieraStanga.setPower(-1 * Variables.supress_pow * Variables.multiplier_non_encoder * glisieraDreapta.getPower() * Variables.speed_control);
-        }else if(glisieraDreapta.getCurrentPosition()>Variables.target+Variables.supression && glisieraDreapta.getCurrentPosition()>Variables.target+Variables.toleranta){
-            glisieraDreapta.setTargetPosition(Variables.target);
+        }else if(glisieraDreapta.getCurrentPosition()>target+supress && glisieraDreapta.getCurrentPosition()>target+toleranta){
+            glisieraDreapta.setTargetPosition(target);
             glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             glisieraDreapta.setPower(Variables.pow);
             glisieraStanga.setPower( -1 * Variables.multiplier_non_encoder * glisieraDreapta.getPower() * Variables.speed_control);
         }
     }
-
+    public void glisieraPos(int target){
+        if(glisieraDreapta.getCurrentPosition()>=target-toleranta && glisieraDreapta.getCurrentPosition()<=target+toleranta) {
+            glisieraDreapta.setPower(0);
+            glisieraStanga.setPower(0);
+        }else if(glisieraDreapta.getCurrentPosition()>target-Variables.supression && glisieraDreapta.getCurrentPosition()<target-toleranta){
+            glisieraDreapta.setTargetPosition(target);
+            glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            glisieraDreapta.setPower(Variables.supress_pow * Variables.pow);
+            glisieraStanga.setPower(Variables.supress_pow * glisieraDreapta.getPower() * Variables.multiplier_non_encoder * Variables.speed_control);
+        }else if(glisieraDreapta.getCurrentPosition()<target-Variables.supression && glisieraDreapta.getCurrentPosition()<target-toleranta){
+            glisieraDreapta.setTargetPosition(target);
+            glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            glisieraDreapta.setPower(Variables.pow);
+            glisieraStanga.setPower(glisieraDreapta.getPower() * Variables.multiplier_non_encoder * Variables.speed_control);
+        }else if(glisieraDreapta.getCurrentPosition()<target+Variables.supression && glisieraDreapta.getCurrentPosition()>target+toleranta){
+            glisieraDreapta.setTargetPosition(target);
+            glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            glisieraDreapta.setPower(Variables.supress_pow * Variables.pow);
+            glisieraStanga.setPower(-1 * Variables.supress_pow * Variables.multiplier_non_encoder * glisieraDreapta.getPower() * Variables.speed_control);
+        }else if(glisieraDreapta.getCurrentPosition()>target+Variables.supression && glisieraDreapta.getCurrentPosition()>target+toleranta){
+            glisieraDreapta.setTargetPosition(target);
+            glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            glisieraDreapta.setPower(Variables.pow);
+            glisieraStanga.setPower( -1 * Variables.multiplier_non_encoder * glisieraDreapta.getPower() * Variables.speed_control);
+        }
+    }
     public void glisieraTelemetry(Telemetry telemetry1){
         telemetry1.addData("glisiera dreapta Pos", glisieraDreapta.getCurrentPosition());
         telemetry1.addData("glisiera stanga Pos", glisieraStanga.getCurrentPosition());
