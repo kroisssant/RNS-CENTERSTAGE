@@ -14,6 +14,17 @@ public class Variables {
     public static int glisieraLow = 300;
     public static int glisieraMid = 800;
     public static int glisieraHigh = 1000;
+    public static int glisieraMax = 1600; //TODO: DE SCHIMBAT
+    public static int numarPerechiGlisiere = 3;
+    public static double tickPerPerecheGlisiera = glisieraMax / numarPerechiGlisiere;
+
+    public static double maxVelocity = 0;
+    public static double maxAccel = 0;
+    public static double kV = 0;
+    public static double kA = 0;
+    public static double kS = 0;
+    public static double kG = 0;
+    public static double kP = 4;
 
     public static double bratDefault = 0;
 

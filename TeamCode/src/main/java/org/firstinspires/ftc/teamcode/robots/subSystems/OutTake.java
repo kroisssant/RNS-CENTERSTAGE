@@ -1,7 +1,14 @@
 package org.firstinspires.ftc.teamcode.robots.subSystems;
 
+import static org.firstinspires.ftc.teamcode.robots.subSystems.Variables.kG;
 import static org.firstinspires.ftc.teamcode.robots.subSystems.Variables.toleranta;
 
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.FeedbackController;
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedforward.FeedforwardController;
+import com.ThermalEquilibrium.homeostasis.Utils.Timer;
+import com.ThermalEquilibrium.homeostasis.Utils.WPILibMotionProfile;
+import com.acmerobotics.roadrunner.control.PIDFController;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
@@ -17,6 +24,20 @@ public class OutTake {
     public Servo claw, pressureStanga, pressureDreapta;
     public DcMotorEx glisieraDreapta, glisieraStanga;
     public Servo bratStanga, bratDreapta;
+    public WPILibMotionProfile motionProfile = new WPILibMotionProfile(new WPILibMotionProfile.Constraints(0, 0), new WPILibMotionProfile.State(0, 0));
+    public FeedforwardController motorFeedForward = new FeedforwardController() {
+        @Override
+        public double calculate(double x, double v, double a) {
+            return getPassivePower((int) x) + Variables.kV * v + Variables.kA * a + Variables.kS;
+        }
+    };
+    public PIDController glisieraPIDStanga = new PIDController(Variables.kP, 0, 0);
+    public PIDController glisieraPIDDreapta = new PIDController(Variables.kP, 0, 0);;
+    public Timer timer = new Timer();
+    public double startTime = 0;
+
+    public double lastTime = 0;
+    public double lastVelocity = 0;
 
     public OutTake (HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw");
@@ -122,6 +143,45 @@ public class OutTake {
             glisieraStanga.setPower( -1 * Variables.multiplier_non_encoder * glisieraDreapta.getPower() * Variables.speed_control);
         }
     }
+
+    public void setPosition(int ticks) {
+        motorFeedForward = new FeedforwardController() {
+            @Override
+            public double calculate(double x, double v, double a) {
+                return getPassivePower((int) x) + Variables.kV * v + Variables.kA * a + Variables.kS;
+            }
+        };
+        glisieraPIDStanga = new PIDController(Variables.kP, 0, 0);
+        glisieraPIDDreapta = new PIDController(Variables.kP, 0, 0);;
+
+        WPILibMotionProfile.Constraints constraints = new WPILibMotionProfile.Constraints(Variables.maxVelocity, Variables.maxAccel);
+        WPILibMotionProfile.State initial = new WPILibMotionProfile.State(getPosition(), getVelocity());
+        WPILibMotionProfile.State goal = new WPILibMotionProfile.State(ticks, 0);
+        motionProfile = new WPILibMotionProfile(constraints, goal, initial);
+
+        startTime = timer.currentTime();
+        lastTime = 0;
+        lastVelocity = 0;
+    }
+
+    public double[] calculatePower() {
+        WPILibMotionProfile.State state = motionProfile.calculate(timer.currentTime() - startTime);
+
+        double leftMotorPower = motorFeedForward.calculate(state.position, state.velocity, (state.velocity - lastVelocity) / (timer.currentTime() - lastTime))
+                + glisieraPIDStanga.calculate(glisieraStanga.getCurrentPosition(), state.position);
+
+        double rightMotorPower = motorFeedForward.calculate(state.position, state.velocity, (state.velocity - lastVelocity) / (timer.currentTime() - lastTime))
+                + glisieraPIDDreapta.calculate(glisieraDreapta.getCurrentPosition(), state.position);
+
+        lastTime = timer.currentTime();
+        lastVelocity = state.velocity;
+
+        return new double[]{leftMotorPower, rightMotorPower, state.position};
+    }
+
+    public double getPassivePower(int ticks) {
+        return Math.max(0, Variables.kG * (Math.ceil(ticks / Variables.tickPerPerecheGlisiera) - 1));
+    }
     public void glisieraTelemetry(Telemetry telemetry1){
         telemetry1.addData("glisiera dreapta Pos", glisieraDreapta.getCurrentPosition());
         telemetry1.addData("glisiera stanga Pos", glisieraStanga.getCurrentPosition());
@@ -129,6 +189,9 @@ public class OutTake {
     }
 
     public int getPosition() {
-        return glisieraDreapta.getCurrentPosition();
+        return (glisieraDreapta.getCurrentPosition() + glisieraStanga.getCurrentPosition()) / 2;
+    }
+    public double getVelocity(){
+        return ( glisieraDreapta.getVelocity() + glisieraStanga.getVelocity() ) / 2;
     }
 }
