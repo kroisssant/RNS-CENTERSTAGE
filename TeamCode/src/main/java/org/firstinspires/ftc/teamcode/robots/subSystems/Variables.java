@@ -18,13 +18,14 @@ public class Variables {
     public static int numarPerechiGlisiere = 3;
     public static double tickPerPerecheGlisiera = glisieraMax / numarPerechiGlisiere;
 
-    public static double maxVelocity = 0;
-    public static double maxAccel = 0;
-    public static double kV = 0;
-    public static double kA = 0;
+    public static double maxVelocity = 750;
+    public static double maxAccel = 1000;
+    public static double kV = 0.00118;
+    public static double kA = 0.0001;
     public static double kS = 0;
-    public static double kG = 0;
-    public static double kP = 4;
+    public static double kG = 0.1;
+    public static double kP = 0.001;
+    public static double carriageWeight = 0;
 
     public static double bratDefault = 0;
 

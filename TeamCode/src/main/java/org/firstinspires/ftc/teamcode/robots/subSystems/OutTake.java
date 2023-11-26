@@ -28,7 +28,7 @@ public class OutTake {
     public FeedforwardController motorFeedForward = new FeedforwardController() {
         @Override
         public double calculate(double x, double v, double a) {
-            return getPassivePower((int) x) + Variables.kV * v + Variables.kA * a + Variables.kS;
+            return Variables.kV * v + Variables.kA * a;
         }
     };
     public PIDController glisieraPIDStanga = new PIDController(Variables.kP, 0, 0);
@@ -148,7 +148,7 @@ public class OutTake {
         motorFeedForward = new FeedforwardController() {
             @Override
             public double calculate(double x, double v, double a) {
-                return getPassivePower((int) x) + Variables.kV * v + Variables.kA * a + Variables.kS;
+                return Variables.kV * v + Variables.kA * a;
             }
         };
         glisieraPIDStanga = new PIDController(Variables.kP, 0, 0);
@@ -168,10 +168,12 @@ public class OutTake {
         WPILibMotionProfile.State state = motionProfile.calculate(timer.currentTime() - startTime);
 
         double leftMotorPower = motorFeedForward.calculate(state.position, state.velocity, (state.velocity - lastVelocity) / (timer.currentTime() - lastTime))
-                + glisieraPIDStanga.calculate(glisieraStanga.getCurrentPosition(), state.position);
+                + glisieraPIDStanga.calculate(glisieraStanga.getCurrentPosition(), state.position)
+                + getPassivePower(glisieraStanga.getCurrentPosition());
 
         double rightMotorPower = motorFeedForward.calculate(state.position, state.velocity, (state.velocity - lastVelocity) / (timer.currentTime() - lastTime))
-                + glisieraPIDDreapta.calculate(glisieraDreapta.getCurrentPosition(), state.position);
+                + glisieraPIDDreapta.calculate(glisieraDreapta.getCurrentPosition(), state.position)
+                + getPassivePower(glisieraDreapta.getCurrentPosition());
 
         lastTime = timer.currentTime();
         lastVelocity = state.velocity;
@@ -180,7 +182,7 @@ public class OutTake {
     }
 
     public double getPassivePower(int ticks) {
-        return Math.max(0, Variables.kG * (Math.ceil(ticks / Variables.tickPerPerecheGlisiera) - 1));
+        return Variables.kG * (Math.ceil(ticks / Variables.tickPerPerecheGlisiera)) + Variables.carriageWeight;
     }
     public void glisieraTelemetry(Telemetry telemetry1){
         telemetry1.addData("glisiera dreapta Pos", glisieraDreapta.getCurrentPosition());
