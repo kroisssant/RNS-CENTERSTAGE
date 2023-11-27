@@ -33,8 +33,8 @@ public class glisieraTest extends LinearOpMode {
             state = outtake.calculatePower();
             outtake.glisieraDreapta.setPower(state[1]);
             outtake.glisieraStanga.setPower(state[0]);
-            telemetry.addData("Position", state[2]);
-            telemetry.addData("Position glis", outtake.getPosition());
+            telemetry.addData("Velocity", state[2]);
+            telemetry.addData("Velocity glis", outtake.getVelocity());
             telemetry.update();
         }
     }

@@ -25,7 +25,7 @@ public class Variables {
     public static double kS = 0;
     public static double kG = 0.1;
     public static double kP = 0.001;
-    public static double carriageWeight = 0;
+    public static double carriageWeight = 0.05;
 
     public static double bratDefault = 0;
 

@@ -178,7 +178,7 @@ public class OutTake {
         lastTime = timer.currentTime();
         lastVelocity = state.velocity;
 
-        return new double[]{leftMotorPower, rightMotorPower, state.position};
+        return new double[]{leftMotorPower, rightMotorPower, state.velocity};
     }
 
     public double getPassivePower(int ticks) {
