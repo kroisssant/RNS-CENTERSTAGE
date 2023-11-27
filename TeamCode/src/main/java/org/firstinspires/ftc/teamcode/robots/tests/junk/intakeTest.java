@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robots.tests;
+package org.firstinspires.ftc.teamcode.robots.tests.junk;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @Config
+@Disabled
 @TeleOp(group = "test", name = "intakeTest")
 public class intakeTest extends LinearOpMode {
     OutTake outtake;

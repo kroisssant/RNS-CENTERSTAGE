@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.robots.tests;
+package org.firstinspires.ftc.teamcode.robots.tests.junk;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-
+@Disabled
 @TeleOp
 public class findMotorTest extends LinearOpMode {
     DcMotorEx motor1, motor2, motor3, motor4;
