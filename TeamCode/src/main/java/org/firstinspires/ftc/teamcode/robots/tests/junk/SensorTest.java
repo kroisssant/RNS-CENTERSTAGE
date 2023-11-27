@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.robots.tests;
+package org.firstinspires.ftc.teamcode.robots.tests.junk;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.wolfpackmachina.bettersensors.Drivers.ColorSensorV3;
@@ -7,6 +8,7 @@ import com.wolfpackmachina.bettersensors.Drivers.ColorSensorV3;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp
+@Disabled
 public class SensorTest extends LinearOpMode {
 
     ColorSensorV3 colorSensor;

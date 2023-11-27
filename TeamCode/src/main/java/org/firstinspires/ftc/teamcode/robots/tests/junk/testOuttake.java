@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.robots.tests;
+package org.firstinspires.ftc.teamcode.robots.tests.junk;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @TeleOp
+@Disabled
 public class testOuttake extends LinearOpMode {
     OutTake outtake;
     @Override

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @Config
-@TeleOp
+@TeleOp(group = "test", name = "Glisiera TEST")
 public class glisieraTest extends LinearOpMode {
     OutTake outtake;
     double[] state;

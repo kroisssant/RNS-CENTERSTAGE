@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.robots.tests;
+package org.firstinspires.ftc.teamcode.robots.tests.junk;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
 import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
-
+@Disabled
 @TeleOp(group = "test", name = "mechansismTest")
 public class fullMechanismTest extends LinearOpMode {
     Intake intake;
