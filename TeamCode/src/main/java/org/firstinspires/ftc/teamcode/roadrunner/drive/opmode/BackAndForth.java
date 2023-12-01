@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
@@ -27,11 +29,15 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 @Config
 @Autonomous(group = "drive")
 public class BackAndForth extends LinearOpMode {
+    OutTake outTake;
 
     public static double DISTANCE = 50;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        outTake = new OutTake(hardwareMap);
+        outTake.setBrat(Variables.bratJos);
+        outTake.setClaw(Variables.pivotJos-0.1);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory trajectoryForward = drive.trajectoryBuilder(new Pose2d())

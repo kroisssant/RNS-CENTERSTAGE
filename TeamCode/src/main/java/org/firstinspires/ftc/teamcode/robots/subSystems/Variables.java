@@ -32,8 +32,8 @@ public class Variables {
     public static double bratJos = 0.08;
     public static double bratSus = 0.95;
 
-    public static double clawJos = 0.79;
-    public static double clawSus = 0.46;
+    public static double pivotJos = 0.79;
+    public static double pivotSus = 0.46;
 
     public static double dropdownPower = 0;
 

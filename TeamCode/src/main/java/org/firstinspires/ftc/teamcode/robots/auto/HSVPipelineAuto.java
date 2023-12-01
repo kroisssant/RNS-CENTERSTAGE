@@ -30,8 +30,8 @@ public class HSVPipelineAuto extends OpenCvPipeline {
     Mat hsvOutput1 = new Mat();
     Mat finalMat = new Mat();
 
-    Scalar lowerb = new Scalar(6, 10, 150);         // lower color border for BLUE
-    Scalar upperb = new Scalar(84, 50, 220);      // upper color border for BLUE
+    Scalar lowerb = new Scalar(50, 50, 100);         // lower color border for BLUE
+    Scalar upperb = new Scalar(135, 255, 225);      // upper color border for BLUE
 
     MatOfPoint2f areaPoints = new MatOfPoint2f();
     RotatedRect boundingRect = new RotatedRect();
@@ -67,7 +67,7 @@ public class HSVPipelineAuto extends OpenCvPipeline {
 
         // 1280x720
         Rect left_roi = new Rect(new Point(80,271), new Point(220, 380));
-        Rect center_roi = new Rect(new Point(550,40), new Point(750, 220));
+        Rect center_roi = new Rect(new Point(450,240), new Point(1050, 350));
         Rect right_roi = new Rect(new Point(1000,129), new Point(1223, 320));
 
         Mat left = hsvOutput.submat(left_roi);
@@ -83,19 +83,19 @@ public class HSVPipelineAuto extends OpenCvPipeline {
         System.out.println(" 3 " + centerValue);
 
         Imgproc.rectangle(
-                hsvOutput,
+                input,
                 left_roi,
                 new Scalar(255, 0, 0)
         );
 
         Imgproc.rectangle(
-                hsvOutput,
+                input,
                 right_roi,
                 new Scalar(255, 0, 0)
         );
 
         Imgproc.rectangle(
-                hsvOutput,
+                input,
                 center_roi,
                 new Scalar(255, 0, 0)
         );
@@ -108,7 +108,7 @@ public class HSVPipelineAuto extends OpenCvPipeline {
         System.out.println("isLeft" + isLeft);
         System.out.println("isCenter" + isCenter);
         if(isLeft){
-            caz = 3;
+            caz = 2;
 
             Imgproc.rectangle(
                     input,
@@ -116,7 +116,7 @@ public class HSVPipelineAuto extends OpenCvPipeline {
                     new Scalar(0, 255, 0)
             );
         } else if(isRight){
-            caz = 2;
+            caz = 3;
 
             Imgproc.rectangle(
                 input,
@@ -132,13 +132,13 @@ public class HSVPipelineAuto extends OpenCvPipeline {
                 new Scalar(0, 255, 0)
             );
         } else {
-            caz = 0;
+            caz = 2;
         }
         left.release();
         right.release();
         center.release();
 
-        return hsvOutput;
+        return input;
     }
 
     @Override

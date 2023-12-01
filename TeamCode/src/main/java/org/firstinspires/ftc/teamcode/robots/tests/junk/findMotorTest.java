@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robots.tests.junk;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,18 +9,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-@Disabled
 @TeleOp
 public class findMotorTest extends LinearOpMode {
     DcMotorEx motor1, motor2, motor3, motor4;
     @Override
     public void runOpMode() throws InterruptedException {
-        motor1 = hardwareMap.get(DcMotorEx.class, "motor1");
-        motor2 = hardwareMap.get(DcMotorEx.class, "motor2");
-        motor3 = hardwareMap.get(DcMotorEx.class, "motor3");
-        motor4 = hardwareMap.get(DcMotorEx.class, "motor4");
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+        motor1 = hardwareMap.get(DcMotorEx.class, "leftRear");
+        motor2 = hardwareMap.get(DcMotorEx.class, "leftFront");
+        motor3 = hardwareMap.get(DcMotorEx.class, "rightRear"); //reverse
+        motor4 = hardwareMap.get(DcMotorEx.class, "rightFront"); //reverse
 
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
