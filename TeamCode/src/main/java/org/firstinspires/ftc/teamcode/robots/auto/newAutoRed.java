@@ -56,10 +56,10 @@ public class newAutoRed extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-50, 70, Math.toRadians(-90)))
                 .build();
         Trajectory toPanel1 = drive.trajectoryBuilder(new Pose2d(-50,70,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 90, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-20, 90, Math.toRadians(-90)))
                 .build();
-        Trajectory toPanelSlow = drive.trajectoryBuilder(new Pose2d(-15,90,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 93, Math.toRadians(-90)),
+        Trajectory toPanelSlow = drive.trajectoryBuilder(new Pose2d(-20,90,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-20, 93, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -71,8 +71,8 @@ public class newAutoRed extends LinearOpMode {
 
 
 
-        Trajectory toStackCenter2 = drive.trajectoryBuilder(new Pose2d(-15,93,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-60, 70, Math.toRadians(-90)),
+        Trajectory toStackCenter2 = drive.trajectoryBuilder(new Pose2d(-17,93,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-50, 70, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -81,11 +81,11 @@ public class newAutoRed extends LinearOpMode {
                         ),new ProfileAccelerationConstraint(60)
                 )
                 .build();
-        Trajectory toStackCenter3 = drive.trajectoryBuilder(new Pose2d(-60,70,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-55.8, -28, Math.toRadians(-90)))
+        Trajectory toStackCenter3 = drive.trajectoryBuilder(new Pose2d(-50,70,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-50, -28, Math.toRadians(-90)))
                 .build();
-        Trajectory toStackCenterSlow = drive.trajectoryBuilder(new Pose2d(-55.8,-28,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-58.9, -31.5, Math.toRadians(-90)),
+        Trajectory toStackCenterSlow = drive.trajectoryBuilder(new Pose2d(-50,-28,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-50, -31.5, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -140,25 +140,25 @@ public class newAutoRed extends LinearOpMode {
 
 
         Trajectory toStackLeft = drive.trajectoryBuilder(new Pose2d(-25, 3, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-50, -10,Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-48, -10,Math.toRadians(0)))
                 .build();
 
 
-        Trajectory toStackLeft1 = drive.trajectoryBuilder(new Pose2d(-50,-10,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-52, -23, Math.toRadians(-90)))
+        Trajectory toStackLeft1 = drive.trajectoryBuilder(new Pose2d(-48,-10,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-48, -23, Math.toRadians(-90)))
                 .build();
 
 
 
 
-        Trajectory toPanelLeft = drive.trajectoryBuilder(new Pose2d(-45,-23,Math.toRadians(-90)))
+        Trajectory toPanelLeft = drive.trajectoryBuilder(new Pose2d(-49,-23,Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(-57, 70, Math.toRadians(-90)))
                 .build();
-        Trajectory toPanelLeft1 = drive.trajectoryBuilder(new Pose2d(-50,70,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 90, Math.toRadians(-90)))
+        Trajectory toPanelLeft1 = drive.trajectoryBuilder(new Pose2d(-57,70,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-17, 90, Math.toRadians(-90)))
                 .build();
-        Trajectory toPanelLeftSlow = drive.trajectoryBuilder(new Pose2d(-15,90,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 93, Math.toRadians(-90)),
+        Trajectory toPanelLeftSlow = drive.trajectoryBuilder(new Pose2d(-17,90,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-17, 93, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -209,10 +209,10 @@ public class newAutoRed extends LinearOpMode {
                 )
                 .build();
         Trajectory toPanelLeft21 = drive.trajectoryBuilder(new Pose2d(-60,65,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 85, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-24, 85, Math.toRadians(-90)))
                 .build();
-        Trajectory toPanelLeftSlow2 = drive.trajectoryBuilder(new Pose2d(-15,85,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 90, Math.toRadians(-90)),
+        Trajectory toPanelLeftSlow2 = drive.trajectoryBuilder(new Pose2d(-24,85,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-24, 90, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -229,11 +229,11 @@ public class newAutoRed extends LinearOpMode {
                 .build();
 
         Trajectory toStackRight = drive.trajectoryBuilder(new Pose2d(-30, -2, Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-50, -10,Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-54, -10,Math.toRadians(0)))
                 .build();
 
 
-        Trajectory toStackRight1 = drive.trajectoryBuilder(new Pose2d(-50,-10,Math.toRadians(-90)))
+        Trajectory toStackRight1 = drive.trajectoryBuilder(new Pose2d(-54,-10,Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(-54, -27, Math.toRadians(-90)))
                 .build();
 
@@ -244,10 +244,10 @@ public class newAutoRed extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-57, 70,Math.toRadians(-90)))
                 .build();
         Trajectory toPanelRight1 = drive.trajectoryBuilder(new Pose2d(-57,70,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-30, 80, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-35, 80, Math.toRadians(-90)))
                 .build();
-        Trajectory toPanelRightSlow = drive.trajectoryBuilder(new Pose2d(-30,80,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-30, 90, Math.toRadians(-90)),
+        Trajectory toPanelRightSlow = drive.trajectoryBuilder(new Pose2d(-35,80,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-35, 90, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -259,7 +259,7 @@ public class newAutoRed extends LinearOpMode {
 
 
 
-        Trajectory toStackRight2 = drive.trajectoryBuilder(new Pose2d(-15,90,Math.toRadians(-90)))
+        Trajectory toStackRight2 = drive.trajectoryBuilder(new Pose2d(-40,90,Math.toRadians(-90)))
                 .lineToLinearHeading(new Pose2d(-60, 70, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
@@ -298,10 +298,10 @@ public class newAutoRed extends LinearOpMode {
                 )
                 .build();
         Trajectory toPanelRight21 = drive.trajectoryBuilder(new Pose2d(-60,65,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 85, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-24, 85, Math.toRadians(-90)))
                 .build();
-        Trajectory toPanelRightSlow2 = drive.trajectoryBuilder(new Pose2d(-15,85,Math.toRadians(-90)))
-                .lineToLinearHeading(new Pose2d(-15, 90, Math.toRadians(-90)),
+        Trajectory toPanelRightSlow2 = drive.trajectoryBuilder(new Pose2d(-24,85,Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-24, 90, Math.toRadians(-90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -398,7 +398,7 @@ public class newAutoRed extends LinearOpMode {
             outtake.setClaw(Variables.pivotJos );
 
             sleep(2000);
-        } else if(caz == 2) {
+        } else if(caz == 3) {
             outtake.setBrat(Variables.bratJos+ 0.03);
             drive.followTrajectory(putPurpleLeft);
             drive.followTrajectory(putPurpleLeft1);
@@ -479,7 +479,7 @@ public class newAutoRed extends LinearOpMode {
 
 
 
-        } else if (caz == 3) {
+        } else if (caz == 2) {
             outtake.setBrat(Variables.bratJos+ 0.03);
             drive.followTrajectory(putPurpleRight);
             outtake.setPressureDreapta(Variables.pressureDreaptaOpen);

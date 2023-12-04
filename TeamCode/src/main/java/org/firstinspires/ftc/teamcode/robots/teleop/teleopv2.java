@@ -129,18 +129,18 @@ public class teleopv2 extends LinearOpMode {
         outTake.glisieraPos(target, Variables.supressionManual, Variables.supression);
 
 
-        if (GAMEPAD1.x.toggle) {
+        if (GAMEPAD1.right_bumper.toggle) {
             outTake.setPressureDreapta(Variables.pressureDreaptaClose);
             outTake.setPressureStanga(Variables.pressureStangaClose);
             pressure = true;
         } else {
-            outTake.setPressureDreapta(Variables.pressureDreaptaOpen);
-            outTake.setPressureStanga(Variables.pressureStangaOpen);
+            outTake.setPressureDreapta(Variables.pressureDreaptaOpen + 0.05);
+            outTake.setPressureStanga(Variables.pressureStangaOpen + 0.05);
             pressure = false;
         }
 
 
-        if (GAMEPAD1.right_bumper.value) {
+        if (GAMEPAD2.right_bumper.value) {
             target = target_sus;
             glisiera_extended = true;
             timerT.reset();
@@ -151,7 +151,7 @@ public class teleopv2 extends LinearOpMode {
         }
 
 
-        if (GAMEPAD1.y.toggle) {
+        if (GAMEPAD2.left_bumper.toggle) {
             outTake.setBrat(Variables.bratSus);
             outTake.setClaw(Variables.pivotSus);
             brat_out = true;
@@ -179,7 +179,7 @@ public class teleopv2 extends LinearOpMode {
 //            target = outTake.glisieraDreapta.getCurrentPosition() + 120;
 //        }else if(GAMEPAD2.right_stick_y > 0.3 && bratIsUp == false){
 //            outTake.setBrat(Variables.bratSus);
-//            bratIsUp = true;
+//            bratIsUp = true;`
 //        } else if(GAMEPAD2.right_stick_y < -0.3 && bratIsUp == true) {
 //            outTake.setBrat(Variables.bratJos);
 //            bratIsUp = false;
@@ -254,9 +254,9 @@ public class teleopv2 extends LinearOpMode {
         if (gp.left_bumper.value) {
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            GAMEPAD1.left_stick_y * 0.3,
-                            -GAMEPAD1.left_stick_x * 0.3,
-                            -GAMEPAD1.right_stick_x * 0.3
+                            GAMEPAD1.left_stick_y * 0.2,
+                            -GAMEPAD1.left_stick_x * 0.2,
+                            -GAMEPAD1.right_stick_x * 0.2
                     )
             );
         } else {
@@ -264,7 +264,7 @@ public class teleopv2 extends LinearOpMode {
                     new Pose2d(
                             GAMEPAD1.left_stick_y,
                             -GAMEPAD1.left_stick_x,
-                            -GAMEPAD1.right_stick_x
+                            -GAMEPAD1.right_stick_x* 0.5
                     )
             );
         }

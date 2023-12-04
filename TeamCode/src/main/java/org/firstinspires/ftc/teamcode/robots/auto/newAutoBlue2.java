@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.robots.auto;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
@@ -22,7 +22,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.Arrays;
 
 @Autonomous
-public class newAutoBlue extends LinearOpMode {
+public class newAutoBlue2 extends LinearOpMode {
     HSVPipelineAuto pipeline;
     SampleMecanumDrive drive;
     OutTake outtake;
@@ -241,10 +241,10 @@ public class newAutoBlue extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(-57, -70, Math.toRadians(90)))
                 .build();
         Trajectory toPanelRight1 = drive.trajectoryBuilder(new Pose2d(-57,-70,Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-30, -80, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-34, -80, Math.toRadians(90)))
                 .build();
-        Trajectory toPanelRightSlow = drive.trajectoryBuilder(new Pose2d(-30,-80,Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-30, -90, Math.toRadians(90)),
+        Trajectory toPanelRightSlow = drive.trajectoryBuilder(new Pose2d(-34,-80,Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-34, -90, Math.toRadians(90)),
                         new MinVelocityConstraint(
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -358,42 +358,6 @@ public class newAutoBlue extends LinearOpMode {
             outtake.glisieraPos(0);
             outtake.setBrat(Variables.bratJos + 0.072);
             outtake.setClaw(Variables.pivotJos + 0.06 );
-
-            drive.followTrajectory(toStackCenter2);
-            drive.followTrajectory(toStackCenter3);
-            outtake.setPressureDreapta(Variables.pressureDreaptaOpen+0.1);
-            outtake.setPressureStanga(Variables.pressureStangaOpen+0.1);
-            drive.followTrajectory(toStackCenterSlow);
-
-            sleep(1000);
-            outtake.setBrat(Variables.bratJos + 0.00);
-
-            sleep(500);
-            outtake.setPressureDreapta(Variables.pressureDreaptaClose);
-            outtake.setPressureStanga(Variables.pressureStangaClose);
-            sleep(500);
-
-
-            outtake.setBrat(Variables.bratJos+ 0.1);
-            drive.followTrajectory(toPanel20);
-            drive.followTrajectory(toPanel21);
-
-            outtake.glisieraPos(400);
-            outtake.setBrat(Variables.bratSus +0.05);
-            outtake.setClaw(Variables.pivotSus);
-            drive.followTrajectory(toPanelSlow2);
-            sleep(300);
-
-
-            outtake.setPressureDreapta(Variables.pressureDreaptaOpen);
-            outtake.setPressureStanga(Variables.pressureStangaOpen);
-            sleep(200);
-
-
-            outtake.glisieraPos(0);
-            outtake.setBrat(Variables.bratJos );
-            outtake.setClaw(Variables.pivotJos );
-
             sleep(2000);
         } else if(caz == 2) {
             outtake.setBrat(Variables.bratJos+ 0.03);
@@ -434,42 +398,6 @@ public class newAutoBlue extends LinearOpMode {
             outtake.glisieraPos(0);
             outtake.setBrat(Variables.bratJos + 0.072);
             outtake.setClaw(Variables.pivotJos + 0.06 );
-
-            drive.followTrajectory(toStackLeft2);
-            drive.followTrajectory(toStackLeft3);
-            outtake.setPressureDreapta(Variables.pressureDreaptaOpen+0.1);
-            outtake.setPressureStanga(Variables.pressureStangaOpen+0.1);
-            drive.followTrajectory(toStackLeftSlow);
-
-            sleep(1000);
-            outtake.setBrat(Variables.bratJos + 0.00);
-
-            sleep(500);
-            outtake.setPressureDreapta(Variables.pressureDreaptaClose);
-            outtake.setPressureStanga(Variables.pressureStangaClose);
-            sleep(500);
-
-
-            outtake.setBrat(Variables.bratJos+ 0.1);
-            drive.followTrajectory(toPanelLeft20);
-            drive.followTrajectory(toPanelLeft21);
-
-            outtake.glisieraPos(400);
-            outtake.setBrat(Variables.bratSus +0.05);
-            outtake.setClaw(Variables.pivotSus);
-            drive.followTrajectory(toPanelLeftSlow2);
-            sleep(300);
-
-
-            outtake.setPressureDreapta(Variables.pressureDreaptaOpen);
-            outtake.setPressureStanga(Variables.pressureStangaOpen);
-            sleep(200);
-
-
-            outtake.glisieraPos(0);
-            outtake.setBrat(Variables.bratJos );
-            outtake.setClaw(Variables.pivotJos );
-
             sleep(2000);
         } else if (caz == 3) {
             outtake.setBrat(Variables.bratJos+ 0.03);
@@ -509,41 +437,6 @@ public class newAutoBlue extends LinearOpMode {
             outtake.glisieraPos(0);
             outtake.setBrat(Variables.bratJos + 0.072);
             outtake.setClaw(Variables.pivotJos + 0.06 );
-
-            drive.followTrajectory(toStackRight2);
-            drive.followTrajectory(toStackRight3);
-            outtake.setPressureDreapta(Variables.pressureDreaptaOpen+0.1);
-            outtake.setPressureStanga(Variables.pressureStangaOpen+0.1);
-            drive.followTrajectory(toStackRightSlow);
-
-            sleep(1000);
-            outtake.setBrat(Variables.bratJos + 0.00);
-
-            sleep(500);
-            outtake.setPressureDreapta(Variables.pressureDreaptaClose);
-            outtake.setPressureStanga(Variables.pressureStangaClose);
-            sleep(500);
-
-
-            outtake.setBrat(Variables.bratJos+ 0.1);
-            drive.followTrajectory(toPanelRight20);
-            drive.followTrajectory(toPanelRight21);
-
-            outtake.glisieraPos(400);
-            outtake.setBrat(Variables.bratSus +0.05);
-            outtake.setClaw(Variables.pivotSus);
-            drive.followTrajectory(toPanelRightSlow2);
-            sleep(300);
-
-
-            outtake.setPressureDreapta(Variables.pressureDreaptaOpen);
-            outtake.setPressureStanga(Variables.pressureStangaOpen);
-            sleep(200);
-
-
-            outtake.glisieraPos(0);
-            outtake.setBrat(Variables.bratJos );
-            outtake.setClaw(Variables.pivotJos );
 
             sleep(2000);
         }

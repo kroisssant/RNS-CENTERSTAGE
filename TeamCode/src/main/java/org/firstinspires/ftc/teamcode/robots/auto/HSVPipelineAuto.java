@@ -30,8 +30,8 @@ public class HSVPipelineAuto extends OpenCvPipeline {
     Mat hsvOutput1 = new Mat();
     Mat finalMat = new Mat();
 
-    Scalar lowerb = new Scalar(50, 50, 100);         // lower color border for BLUE
-    Scalar upperb = new Scalar(135, 255, 225);      // upper color border for BLUE
+    Scalar lowerb = new Scalar(80, 50, 50);         // lower color border for BLUE
+    Scalar upperb = new Scalar(150, 255, 225);      // upper color border for BLUE
 
     MatOfPoint2f areaPoints = new MatOfPoint2f();
     RotatedRect boundingRect = new RotatedRect();
@@ -66,9 +66,9 @@ public class HSVPipelineAuto extends OpenCvPipeline {
         final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(800, 800);
 
         // 1280x720
-        Rect left_roi = new Rect(new Point(80,271), new Point(220, 380));
-        Rect center_roi = new Rect(new Point(450,240), new Point(1050, 350));
-        Rect right_roi = new Rect(new Point(1000,129), new Point(1223, 320));
+        Rect left_roi = new Rect(new Point(150,271), new Point(320, 380));
+        Rect center_roi = new Rect(new Point(450,240), new Point(950, 350));
+        Rect right_roi = new Rect(new Point(1000,250), new Point(1223, 520));
 
         Mat left = hsvOutput.submat(left_roi);
         Mat right = hsvOutput.submat(right_roi);
@@ -99,10 +99,15 @@ public class HSVPipelineAuto extends OpenCvPipeline {
                 center_roi,
                 new Scalar(255, 0, 0)
         );
+        boolean isCenter;
+        boolean isLeft = leftValue > (THRESHOLD -0.1);
+        boolean isRight = rightValue > (THRESHOLD - 0.1);
+        if(1 > centerValue && centerValue > (THRESHOLD -0.1)) {
+            isCenter = true;
+        } else {
+            isCenter = false;
+        }
 
-        boolean isLeft = leftValue > THRESHOLD;
-        boolean isRight = rightValue > THRESHOLD;
-        boolean isCenter = centerValue > THRESHOLD;
 
         System.out.println("isRight" + isRight);
         System.out.println("isLeft" + isLeft);
@@ -131,8 +136,15 @@ public class HSVPipelineAuto extends OpenCvPipeline {
                 center_roi,
                 new Scalar(0, 255, 0)
             );
-        } else {
-            caz = 2;
+        }
+        else {
+            if(Color == 1) {
+                caz = 2;
+            }
+            if(Color == 2) {
+                caz = 3;
+            }
+
         }
         left.release();
         right.release();
