@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "setBratPos")
+@TeleOp(name = "setBratPosDaria")
 @Config
 public class setServoBratPos extends LinearOpMode {
-    Servo servo1, servo2;
+    Servo servo1, servo2; //1 stanga, 2 dreapta
     public static double pos = 0.1;
     @Override
     public void runOpMode() throws InterruptedException {
