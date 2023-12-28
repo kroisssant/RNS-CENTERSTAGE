@@ -11,6 +11,7 @@ public class ScoringSubsystem extends SubsystemBase {
     Servo pressureDreapta, pressureStanga;
     Servo pivot;
     Servo bratDreapta, bratStanga;
+    public boolean pressureToggle = false;
 
     public ScoringSubsystem(HardwareMap hardwareMap){
         pressureDreapta = hardwareMap.get(Servo.class, HardwareConstants.ID_PRESSURE_DREAPTA);
@@ -19,12 +20,15 @@ public class ScoringSubsystem extends SubsystemBase {
         bratDreapta = hardwareMap.get(Servo.class, HardwareConstants.ID_BRAT_DREAPTA);
         bratStanga = hardwareMap.get(Servo.class, HardwareConstants.ID_BRAT_STANGA);
 
-        bratDreapta.setDirection(Servo.Direction.REVERSE);
+        bratStanga.setDirection(Servo.Direction.REVERSE);
         pressureDreapta.setDirection(Servo.Direction.REVERSE);
+
         pivot = hardwareMap.get(Servo.class, HardwareConstants.ID_PIVOT);
 
-        setBratPos(Constants.BRAT_JOS);
-        setPressurePos(Constants.PRESSURE_DESCHIS);
+        pivot.setDirection(Servo.Direction.REVERSE);
+//        setBratPos(Constants.BRAT_JOS+0.01);
+        setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+        setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
         pivot.setPosition(Constants.PIVOT_JOS);
     }
 
@@ -33,9 +37,24 @@ public class ScoringSubsystem extends SubsystemBase {
         bratStanga.setPosition(position);
     }
 
-    public void setPressurePos(double position){
+    public void setPressureDreaptaPos(double position){
         pressureDreapta.setPosition(position);
+    }
+
+    public void setPressureStangaPos(double position){
         pressureStanga.setPosition(position);
+    }
+
+    public void pressureOpen(){
+        setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+        setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+        pressureToggle = false;
+    }
+
+    public void pressureClose(){
+        setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
+        setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);
+        pressureToggle = true;
     }
 
     public void setPivot(double position){

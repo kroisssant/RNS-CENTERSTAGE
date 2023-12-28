@@ -7,17 +7,19 @@ import com.ThermalEquilibrium.homeostasis.Utils.WPILibMotionProfile;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants.Constants;
 import org.firstinspires.ftc.teamcode.Constants.HardwareConstants;
 
+@Disabled
+
 public class GlisiereSubsystem extends SubsystemBase {
     public Motor glisieraStanga, glisieraDreapta;
     private Telemetry telemetry;
-
-    private WPILibMotionProfile motionProfile = getMotionProfile(0,0);
+    private WPILibMotionProfile motionProfile; // = getMotionProfile(0,0);
     private Timer timer;
     private double lastVelocity = 0;
     private double lastTime = 0;
@@ -33,16 +35,22 @@ public class GlisiereSubsystem extends SubsystemBase {
         Constants.GLISIERE_KV, Constants.GLISIERE_KA, Constants.GLISIERE_KS, Constants.GLISIERE_KG, 0
     ));
 
-    public GlisiereSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
-        glisieraDreapta = new Motor(hardwareMap, HardwareConstants.ID_GLISIERA_DREAPTA);
-        glisieraStanga = new Motor(hardwareMap, HardwareConstants.ID_GLISIERA_STANGA);
+    public GlisiereSubsystem(HardwareMap hardwareMap, Telemetry telemetry, Motor glisieraDreapta, Motor glisieraStanga) {
+//        glisieraDreapta = new Motor(hardwareMap, HardwareConstants.ID_GLISIERA_DREAPTA);
+//        glisieraStanga = new Motor(hardwareMap, HardwareConstants.ID_GLISIERA_STANGA);
+        this.glisieraStanga = glisieraStanga;
+        this.glisieraDreapta = glisieraDreapta;
 
-        glisieraStanga.setInverted(true);
+        this.glisieraDreapta.setInverted(true);
 
-        glisieraStanga.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        glisieraDreapta.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.glisieraStanga.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.glisieraDreapta.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         this.telemetry = telemetry;
+
+        this.motionProfile = getMotionProfile(0,0);
+
+        setGlisiereFinalPosition(0);
     }
 
     @Override

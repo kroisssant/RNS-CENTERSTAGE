@@ -20,7 +20,8 @@
             <goBILDA5202SeriesMotor name = "glisieraStanga" port="1" />
             <goBILDA5202SeriesMotor name = "LeftFront" port="03" />
             <Servo name = "bratStanga" port = "2" />
-            <Servo name = "pressureStanga" port = "4" />
+            <Servo name = "pivot" port = "3" />
+            <Servo name = "pressureStanga" port = "0" />
         </LynxModule>
 
     </LynxUsbDevice>

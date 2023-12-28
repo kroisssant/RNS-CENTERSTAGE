@@ -15,6 +15,8 @@ public class DriveCommand extends CommandBase {
         this.fw = fw;
         this.str = str;
         this.rot = rot;
+
+        addRequirements(driveSubsystem);
     }
 
     @Override

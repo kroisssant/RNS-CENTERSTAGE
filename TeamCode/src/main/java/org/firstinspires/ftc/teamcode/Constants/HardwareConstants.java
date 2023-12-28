@@ -5,7 +5,7 @@ public class HardwareConstants {
     public static final String ID_LEFT_REAR_MOTOR = "LeftRear";
     public static final String ID_RIGHT_FRONT_MOTOR = "RightFront";
     public static final String ID_RIGHT_REAR_MOTOR = "RightRear";
-    public static final String ID_MOTOR_INTAKE ="";
+    public static final String ID_MOTOR_INTAKE ="intake";
     public static final String ID_GLISIERA_DREAPTA ="glisieraDreapta";
     public static final String ID_GLISIERA_STANGA ="glisieraStanga";
     public static final String ID_PRESSURE_DREAPTA = "pressureDreapta";

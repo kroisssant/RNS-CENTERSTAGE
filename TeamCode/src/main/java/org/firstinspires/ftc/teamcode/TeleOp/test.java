@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -37,7 +38,6 @@ public class test extends LinearOpMode {
     public static double pivotV = 0;
 
     public static double intakepow = 0.4;
-    Gamepad gamepad;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -52,35 +52,44 @@ public class test extends LinearOpMode {
         bratStanga = hardwareMap.get(Servo.class, "bratStanga");
         pivot = hardwareMap.get(Servo.class, "pivot");
 
-        pressureDreapta.setDirection(Servo.Direction.REVERSE);
-        bratDreapta.setDirection(Servo.Direction.REVERSE);
+        glisieraDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        glisieraStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        glisieraStanga.setDirection(DcMotorSimple.Direction.REVERSE);
+        pressureDreapta.setDirection(Servo.Direction.REVERSE);
+        bratStanga.setDirection(Servo.Direction.REVERSE);
+        pivot.setDirection(Servo.Direction.REVERSE);
+
+        glisieraDreapta.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
         while(opModeIsActive()&& !isStopRequested()){
-            if(gamepad.a) {
+            if(gamepad1.a) {
                 pressureStanga.setPosition(pressureStangaV);
+                sleep(350);
             }
 
-            if(gamepad.b){
+            if(gamepad1.b){
                 pressureDreapta.setPosition(pressureDreaptaV);
+                sleep(350);
             }
 
-            if(gamepad.x){
+            if(gamepad1.x){
                 bratDreapta.setPosition(brat);
+                bratStanga.setPosition(brat);
+                sleep(350);
             }
 
-            if(gamepad.y){
-                bratStanga.setPosition(pivotV);
+            if(gamepad1.y){
+                pivot.setPosition(pivotV);
+                sleep(350);
             }
 
-            if(gamepad.right_trigger > 0.2){
+            if(gamepad1.right_trigger > 0.2){
                 intake.setPower(intakepow);
-            } else if(gamepad.left_trigger > 0.2){
+            } else if(gamepad1.left_trigger > 0.2){
                 intake.setPower(-intakepow);
-            }
+            } else intake.setPower(0);
 
             telemetry.addData("dreapta", glisieraDreapta.getCurrentPosition());
             telemetry.addData("stanga", glisieraStanga.getCurrentPosition());
