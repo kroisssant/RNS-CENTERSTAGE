@@ -6,13 +6,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Constants.Constants;
 import org.firstinspires.ftc.teamcode.Constants.HardwareConstants;
+import org.firstinspires.ftc.teamcode.Utils.RNSMotor;
 
 public class IntakeSubsystem extends SubsystemBase {
-    Motor motorIntake;
+    RNSMotor motorIntake;
 
     public IntakeSubsystem(HardwareMap hardwareMap){
-        motorIntake = new Motor(hardwareMap, HardwareConstants.ID_MOTOR_INTAKE);
-        motorIntake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        motorIntake = new RNSMotor(hardwareMap, HardwareConstants.ID_MOTOR_INTAKE);
+        motorIntake.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.FLOAT);
     }
 
     public void setIntakePower(double power){

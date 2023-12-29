@@ -2,29 +2,30 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+import org.firstinspires.ftc.teamcode.Utils.RNSMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 
 import org.firstinspires.ftc.teamcode.Constants.HardwareConstants;
 
 public class DriveSubsystem extends SubsystemBase {
-    Motor leftFront, leftRear;
-    Motor rightFront, rightRear;
+    RNSMotor leftFront, leftRear;
+    RNSMotor rightFront, rightRear;
     MecanumDrive drive;
 
     public DriveSubsystem(HardwareMap hardwareMap) {
-        leftFront = new Motor(hardwareMap, HardwareConstants.ID_LEFT_FRONT_MOTOR);
-        leftRear = new Motor(hardwareMap, HardwareConstants.ID_LEFT_REAR_MOTOR);
-        rightFront = new Motor(hardwareMap, HardwareConstants.ID_RIGHT_FRONT_MOTOR);
-        rightRear = new Motor(hardwareMap, HardwareConstants.ID_RIGHT_REAR_MOTOR);
+        leftFront = new RNSMotor(hardwareMap, HardwareConstants.ID_LEFT_FRONT_MOTOR);
+        leftRear = new RNSMotor(hardwareMap, HardwareConstants.ID_LEFT_REAR_MOTOR);
+        rightFront = new RNSMotor(hardwareMap, HardwareConstants.ID_RIGHT_FRONT_MOTOR);
+        rightRear = new RNSMotor(hardwareMap, HardwareConstants.ID_RIGHT_REAR_MOTOR);
 
         rightFront.setInverted(true);
         leftRear.setInverted(true);
 
-        leftFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        leftRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        leftFront.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
 
         drive = new MecanumDrive(leftFront, rightFront, leftRear, rightRear);
     }

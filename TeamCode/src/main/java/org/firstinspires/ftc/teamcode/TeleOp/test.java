@@ -37,7 +37,7 @@ public class test extends LinearOpMode {
 
     public static double pivotV = 0;
 
-    public static double intakepow = 0.4;
+    public static double intakepow = 0.5;
 
     @Override
     public void runOpMode() throws InterruptedException {
