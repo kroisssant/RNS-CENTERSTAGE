@@ -20,7 +20,7 @@ public class DriveSubsystem extends SubsystemBase {
         rightRear = new RNSMotor(hardwareMap, HardwareConstants.ID_RIGHT_REAR_MOTOR);
 
         rightFront.setInverted(true);
-        leftRear.setInverted(true);
+        rightRear.setInverted(true);
 
         leftFront.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
