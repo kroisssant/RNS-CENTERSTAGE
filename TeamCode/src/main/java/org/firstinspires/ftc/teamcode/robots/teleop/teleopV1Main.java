@@ -10,17 +10,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
 import org.firstinspires.ftc.teamcode.robots.States.STATES;
 import org.firstinspires.ftc.teamcode.robots.subSystems.DriveTrain;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @TeleOp(group = "main", name = "teleopMAIN")
 public class teleopV1Main extends LinearOpMode {
 
     //Declaration of classes that wil be used in this teleop
-    Intake intake;
+    IntakeOld intake;
     int target = 0;
-    OutTake outTake;
+    OutTakeOld outTake;
     GAMEPAD GAMEPAD1, GAMEPAD2; //1 chassis
     DriveTrain drive;
     ElapsedTime timerForGlisieraSus;
@@ -40,8 +40,8 @@ public class teleopV1Main extends LinearOpMode {
         drive = new DriveTrain(hardwareMap, telemetry);
         timerForGlisieraSus = new ElapsedTime();
         timerForGlisieraJos = new ElapsedTime();
-        intake = new Intake(hardwareMap);
-        outTake = new OutTake(hardwareMap);
+        intake = new IntakeOld(hardwareMap);
+        outTake = new OutTakeOld(hardwareMap);
 
 
         outTake.setClaw(Variables.pivotJos);

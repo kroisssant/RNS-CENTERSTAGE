@@ -8,16 +8,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 
 @Config
 @Disabled
 @TeleOp(group = "test", name = "intakeTest")
 public class intakeTest extends LinearOpMode {
-    OutTake outtake;
-    Intake intake;
+    OutTakeOld outtake;
+    IntakeOld intake;
     GAMEPAD gp1;
     public static double pos = 0.1;
     public static double posClaw = 0;
@@ -25,7 +24,7 @@ public class intakeTest extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        outtake = new OutTake(hardwareMap);
+        outtake = new OutTakeOld(hardwareMap);
 //        intake = new Intake(hardwareMap);
         gp1 = new GAMEPAD(this.gamepad1, telemetry);
         waitForStart();

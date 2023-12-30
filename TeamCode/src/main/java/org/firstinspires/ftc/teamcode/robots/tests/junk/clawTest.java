@@ -3,9 +3,8 @@ package org.firstinspires.ftc.teamcode.robots.tests.junk;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 
 @Config
 @TeleOp
@@ -15,10 +14,10 @@ public class clawTest extends LinearOpMode {
     public static double pressureStanga = 0.35;
     public static double pressureDreapta = 0.46;
 
-    OutTake outTake;
+    OutTakeOld outTake;
     @Override
     public void runOpMode() throws InterruptedException {
-        outTake = new OutTake(hardwareMap);
+        outTake = new OutTakeOld(hardwareMap);
         waitForStart();
         while(opModeIsActive() && !isStopRequested()){
             outTake.claw.setPosition(posClaw);

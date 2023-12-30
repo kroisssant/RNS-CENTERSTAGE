@@ -7,21 +7,21 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 @Disabled
 @TeleOp(group = "test", name = "mechansismTest")
 public class fullMechanismTest extends LinearOpMode {
-    Intake intake;
-    OutTake outtake;
+    IntakeOld intake;
+    OutTakeOld outtake;
 
     GAMEPAD GAMEPAD1;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        intake = new Intake(hardwareMap);
-        outtake = new OutTake(hardwareMap);
+        intake = new IntakeOld(hardwareMap);
+        outtake = new OutTakeOld(hardwareMap);
         GAMEPAD1 = new GAMEPAD(this.gamepad1, telemetry);
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {

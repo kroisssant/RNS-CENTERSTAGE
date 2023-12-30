@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robots.DriveConstants;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -25,12 +25,12 @@ import java.util.Arrays;
 public class newAutoBlue2 extends LinearOpMode {
     HSVPipelineAuto pipeline;
     SampleMecanumDrive drive;
-    OutTake outtake;
+    OutTakeOld outtake;
     public static int caz = 3;
     OpenCvCamera camera;
     @Override
     public void runOpMode() throws InterruptedException {
-        outtake = new OutTake(hardwareMap);
+        outtake = new OutTakeOld(hardwareMap);
         pipeline = new HSVPipelineAuto(1);
         drive = new SampleMecanumDrive(hardwareMap);
         initOpenCV();

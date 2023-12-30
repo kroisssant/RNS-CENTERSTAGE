@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robots.auto.HSVPipelineAuto;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -20,16 +20,16 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Config
 @Autonomous
 public class porstStangaDeparteSafeRed extends LinearOpMode {
-    Intake intake;
-    OutTake outtake;
+    IntakeOld intake;
+    OutTakeOld outtake;
     SampleMecanumDrive drive;
     OpenCvCamera camera;
     HSVPipelineAuto pipeline = new HSVPipelineAuto(2);
     public int caz = pipeline.caz;
     @Override
     public void runOpMode() throws InterruptedException {
-        intake = new Intake(hardwareMap);
-        outtake = new OutTake(hardwareMap);
+        intake = new IntakeOld(hardwareMap);
+        outtake = new OutTakeOld(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
         initOpenCV();
 

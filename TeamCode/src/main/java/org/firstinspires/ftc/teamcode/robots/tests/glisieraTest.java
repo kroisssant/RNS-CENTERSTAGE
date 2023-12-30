@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.robots.tests;
 
-import com.ThermalEquilibrium.homeostasis.Utils.WPILibMotionProfile;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -8,19 +7,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @Config
 @TeleOp(group = "test", name = "Glisiera TEST")
 public class glisieraTest extends LinearOpMode {
-    OutTake outtake;
+    OutTakeOld outtake;
     double[] state;
 
     @Override
     public void runOpMode() throws InterruptedException {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        outtake = new OutTake(hardwareMap);
+        outtake = new OutTakeOld(hardwareMap);
         waitForStart();
         while(opModeIsActive() && !isStopRequested()) {
             if(gamepad1.b) {

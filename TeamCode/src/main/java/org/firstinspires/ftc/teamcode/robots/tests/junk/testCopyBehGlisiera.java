@@ -7,19 +7,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @Config
 @TeleOp
 @Disabled
 public class testCopyBehGlisiera extends LinearOpMode {
-    Intake intake;
-    OutTake outTake;
+    IntakeOld intake;
+    OutTakeOld outTake;
 
     public static double pow = 0.4;
     public static double supress_pow = 0.1;
@@ -33,8 +31,8 @@ public class testCopyBehGlisiera extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        outTake = new OutTake(hardwareMap);
-        intake = new Intake(hardwareMap); // 300 900 1600
+        outTake = new OutTakeOld(hardwareMap);
+        intake = new IntakeOld(hardwareMap); // 300 900 1600
 
 
         outTake.setPressureStanga(Variables.pressureStangaClose);

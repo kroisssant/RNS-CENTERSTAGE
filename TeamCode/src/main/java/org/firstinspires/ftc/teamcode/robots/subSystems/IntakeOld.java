@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class Intake {
+public class IntakeOld {
     DcMotorEx intakeDreapta, intakeStanga;
 //    MotorGroup intake;
     Servo dropdown;
-    public Intake(HardwareMap hardwareMap) {
+    public IntakeOld(HardwareMap hardwareMap) {
         intakeDreapta = hardwareMap.get(DcMotorEx.class, "intakeDreapta");
         intakeStanga = hardwareMap.get(DcMotorEx.class, "intakeStanga");
         dropdown = hardwareMap.get(Servo.class, "dropdown");

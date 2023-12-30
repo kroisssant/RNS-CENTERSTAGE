@@ -12,10 +12,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class OutTake {
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+public class OutTakeOld {
     public Servo claw, pressureStanga, pressureDreapta;
     public DcMotorEx glisieraDreapta, glisieraStanga;
-    public Servo bratStanga, bratDreapta, twist;
+    public Servo bratStanga, bratDreapta;
     public WPILibMotionProfile motionProfile = new WPILibMotionProfile(new WPILibMotionProfile.Constraints(0, 0), new WPILibMotionProfile.State(0, 0));
     public FeedforwardController motorFeedForward = new FeedforwardController() {
         @Override
@@ -31,7 +33,7 @@ public class OutTake {
     public double lastTime = 0;
     public double lastVelocity = 0;
 
-    public OutTake (HardwareMap hardwareMap) {
+    public OutTakeOld(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, "claw");
 
         pressureDreapta = hardwareMap.get(Servo.class, "pressureDreapta");
@@ -42,15 +44,13 @@ public class OutTake {
         bratDreapta = hardwareMap.get(Servo.class, "bratDreapta");
         bratStanga.setDirection(Servo.Direction.REVERSE);
 
-        twist = hardwareMap.get(Servo.class, "twist");
-
         glisieraDreapta = hardwareMap.get(DcMotorEx.class, "glisieraDreapta");
         glisieraStanga = hardwareMap.get(DcMotorEx.class, "glisieraStanga");
-        glisieraDreapta.setDirection(DcMotorSimple.Direction.REVERSE);
 
         glisieraDreapta.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         glisieraStanga.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         glisieraDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        glisieraDreapta.setDirection(DcMotorSimple.Direction.REVERSE);
 
         setZeroPowerBeh(DcMotor.ZeroPowerBehavior.BRAKE);
     }
@@ -59,13 +59,24 @@ public class OutTake {
         glisieraDreapta.setZeroPowerBehavior(beh);
         glisieraStanga.setZeroPowerBehavior(beh);
     }
+
+    public void run(double power, int target) {
+        glisieraDreapta.setTargetPosition(target);
+        glisieraDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        glisieraDreapta.setPower(power);
+        glisieraStanga.setPower(glisieraDreapta.getPower());
+    }
+    public void stopGlisiera() {
+        glisieraStanga.setPower(0);
+        glisieraDreapta.setPower(0);
+    }
     public void setPressureDreapta(double pos) {
         pressureDreapta.setPosition(pos);
     }
     public void setPressureStanga(double pos) {
         pressureStanga.setPosition(pos);
     }
-    public double getPressureDreapta() { return (double) pressureDreapta.getPosition(); }
+    public double getPressureDreapta(){return (double) pressureDreapta.getPosition();};
     public void setClaw(double pos) {
         claw.setPosition(pos);
     }
@@ -168,7 +179,16 @@ public class OutTake {
     public double getPassivePower(int ticks) {
         return Variables.kG * (Math.ceil(ticks / Variables.tickPerPerecheGlisiera)) + Variables.carriageWeight;
     }
+    public void glisieraTelemetry(Telemetry telemetry1){
+        telemetry1.addData("glisiera dreapta Pos", glisieraDreapta.getCurrentPosition());
+        telemetry1.addData("glisiera stanga Pos", glisieraStanga.getCurrentPosition());
+        telemetry1.update();
+    }
 
-    public int getPosition() { return (glisieraDreapta.getCurrentPosition() + glisieraStanga.getCurrentPosition()) / 2; }
-    public double getVelocity() { return ( glisieraDreapta.getVelocity() + glisieraStanga.getVelocity() ) / 2; }
+    public int getPosition() {
+        return (glisieraDreapta.getCurrentPosition() + glisieraStanga.getCurrentPosition()) / 2;
+    }
+    public double getVelocity(){
+        return ( glisieraDreapta.getVelocity() + glisieraStanga.getVelocity() ) / 2;
+    }
 }

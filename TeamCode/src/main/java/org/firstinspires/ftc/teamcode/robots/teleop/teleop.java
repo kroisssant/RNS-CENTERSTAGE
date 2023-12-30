@@ -1,22 +1,20 @@
 package org.firstinspires.ftc.teamcode.robots.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
-import org.firstinspires.ftc.teamcode.Libs.STATE;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @TeleOp
 public class teleop extends LinearOpMode {
-    OutTake outtake;
-    Intake intake;
+    OutTakeOld outtake;
+    IntakeOld intake;
     SampleMecanumDrive drive;
     GAMEPAD GAMEPAD1, GAMEPAD2;
 
@@ -32,8 +30,8 @@ public class teleop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         timer = new ElapsedTime();
-        outtake = new OutTake(hardwareMap);
-        intake = new Intake(hardwareMap);
+        outtake = new OutTakeOld(hardwareMap);
+        intake = new IntakeOld(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
         intake.setDropdown(0.25);
         outtake.setPressureStanga(Variables.pressureStangaOpen);

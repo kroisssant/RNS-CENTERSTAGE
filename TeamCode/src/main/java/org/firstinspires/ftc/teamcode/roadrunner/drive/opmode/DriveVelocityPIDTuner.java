@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 import java.util.List;
@@ -55,7 +55,7 @@ import java.util.List;
 public class DriveVelocityPIDTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
-    OutTake outTake;
+    OutTakeOld outTake;
 
     enum Mode {
         DRIVER_MODE,
@@ -70,7 +70,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        outTake = new OutTake(hardwareMap);
+        outTake = new OutTakeOld(hardwareMap);
         outTake.setBrat(Variables.bratJos);
         outTake.setClaw(Variables.pivotJos);
         if (!RUN_USING_ENCODER) {

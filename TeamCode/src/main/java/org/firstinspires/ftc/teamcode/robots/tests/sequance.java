@@ -2,22 +2,20 @@ package org.firstinspires.ftc.teamcode.robots.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @TeleOp(name = "sequanceTest")
 public class sequance extends LinearOpMode {
-    OutTake outTake;
+    OutTakeOld outTake;
     ElapsedTime timer;
     STATES glisieraState = STATES.DONE;
     @Override
     public void runOpMode() throws InterruptedException {
-        outTake = new OutTake(hardwareMap);
+        outTake = new OutTakeOld(hardwareMap);
         timer = new ElapsedTime();
         GAMEPAD GAMEPAD = new GAMEPAD(this.gamepad1, telemetry);
         waitForStart();

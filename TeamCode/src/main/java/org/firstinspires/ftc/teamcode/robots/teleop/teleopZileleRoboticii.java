@@ -6,20 +6,19 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
 import org.firstinspires.ftc.teamcode.robots.States.STATES;
 import org.firstinspires.ftc.teamcode.robots.subSystems.DriveTrain;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 
 @TeleOp(group = "main", name = "teleopZILELEROBOTICII")
 public class teleopZileleRoboticii extends LinearOpMode {
 
-    Intake intake;
-    OutTake outTake;
+    IntakeOld intake;
+    OutTakeOld outTake;
     GAMEPAD GAMEPAD1, GAMEPAD2; //1 chassis
     DriveTrain drive;
     ElapsedTime timerForGlisieraSus;
@@ -45,8 +44,8 @@ public class teleopZileleRoboticii extends LinearOpMode {
         drive = new DriveTrain(hardwareMap, telemetry);
         timerForGlisieraSus = new ElapsedTime();
         timerForGlisieraJos = new ElapsedTime();
-        intake = new Intake(hardwareMap);
-        outTake = new OutTake(hardwareMap);
+        intake = new IntakeOld(hardwareMap);
+        outTake = new OutTakeOld(hardwareMap);
 
         outTake.setClaw(Variables.pivotJos);
         outTake.setBrat(Variables.bratJos);

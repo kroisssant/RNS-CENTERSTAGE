@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeOld;
+import org.firstinspires.ftc.teamcode.robots.subSystems.OutTakeOld;
 import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -21,12 +21,12 @@ public class auto85 extends LinearOpMode {
     OpenCvCamera camera;
     int caz = 1;
     SampleMecanumDrive drive;
-    Intake intake;
-    OutTake outtake;
+    IntakeOld intake;
+    OutTakeOld outtake;
     @Override
     public void runOpMode() throws InterruptedException {
-        intake = new Intake(hardwareMap);
-        outtake = new OutTake(hardwareMap);
+        intake = new IntakeOld(hardwareMap);
+        outtake = new OutTakeOld(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
         outtake.setPressureStanga(Variables.pressureStangaOpen);
         outtake.setPressureDreapta(Variables.pressureDreaptaOpen);
