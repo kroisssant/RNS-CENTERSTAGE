@@ -27,8 +27,10 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Constants.Constants;
 import org.firstinspires.ftc.teamcode.Constants.HardwareConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
@@ -38,6 +40,7 @@ import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
@@ -60,6 +63,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8.5, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1;
+    public static boolean vision = false;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -81,11 +85,16 @@ public class SampleMecanumDrive extends MecanumDrive {
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
 
+    private Pose2d goToAprilTagPower;
+    private Pose2d initialAprilTagPower;
+
+    private ElapsedTime elapsedTime = new ElapsedTime();
+
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
+                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0);
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
@@ -202,7 +211,31 @@ public class SampleMecanumDrive extends MecanumDrive {
     public void update() {
         updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
-        if (signal != null) setDriveSignal(signal);
+
+        double percentageControlEffort = elapsedTime.now(TimeUnit.SECONDS) / trajectorySequenceRunner.currentTrajectorySequence.duration();
+
+        Pose2d driveSignalVel = signal.getVel().times(1 - percentageControlEffort).plus(goToAprilTagPower.times(Constants.APRIL_TAG_MAX_VEL).times(percentageControlEffort));
+        Pose2d driveSignalAccel = signal.getAccel().times(1 - percentageControlEffort).plus(goToAprilTagPower.times(Constants.APRIL_TAG_MAX_ACC).times(percentageControlEffort));
+
+        if(this.vision) {
+            if (signal != null) setDriveSignal(
+                    new DriveSignal(
+                            driveSignalVel,
+                            driveSignalAccel
+                    )
+            );
+        } else {
+            if (signal != null) setDriveSignal(signal);
+        }
+    }
+
+    public void setAprilTagDetectionPower(Pose2d power) {
+        goToAprilTagPower = power;
+    }
+
+    public void setVision(boolean vision) {
+        this.vision = vision;
+        elapsedTime.reset();
     }
 
     public void waitForIdle() {
