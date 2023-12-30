@@ -48,7 +48,7 @@ public class TrajectorySequenceRunner {
 
     private final NanoClock clock;
 
-    private TrajectorySequence currentTrajectorySequence;
+    public TrajectorySequence currentTrajectorySequence;
     private double currentSegmentStartTime;
     private int currentSegmentIndex;
     private int lastSegmentIndex;

@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class Constants {
+    public static final double APRIL_TAG_MAX_VEL = 50; // in / s
+    public static final double APRIL_TAG_MAX_ACC = 50; // in / s
     public static double PRESSURE_DREAPTA_DESCHIS = 0.38;
     public static double PRESSURE_DREAPTA_INCHIS = 0.33;
 
