@@ -18,7 +18,7 @@
         <LynxModule name = "Expansion Hub 10" port = "10">
             <goBILDA5202SeriesMotor name = "RightRear" port="0" />
             <goBILDA5202SeriesMotor name = "glisieraStanga" port="1" />
-            <goBILDA5202SeriesMotor name = "RightFront" port="03" />
+            <goBILDA5202SeriesMotor name = "RightFront" port="3" />
             <Servo name = "bratStanga" port = "2" />
             <Servo name = "pivot" port = "4" />
             <Servo name = "pressureStanga" port = "0" />
