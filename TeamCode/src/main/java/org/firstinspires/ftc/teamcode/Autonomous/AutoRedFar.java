@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ScoringSubsystem;
+import org.firstinspires.ftc.teamcode.Utils.CommandOpModeAuto;
 import org.firstinspires.ftc.teamcode.Vision.HSVAutoPipeline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -35,7 +36,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.Timer;
 
 @Autonomous
-public class AutoRedFar extends CommandOpMode {
+public class AutoRedFar extends CommandOpModeAuto {
     SampleMecanumDrive drive;
     GlisiereSubsystem glisiereSubsystem;
     IntakeSubsystem intakeSubsystem;
@@ -49,6 +50,8 @@ public class AutoRedFar extends CommandOpMode {
 
     private SequentialCommandGroup toScoreSequence1;
     private SequentialCommandGroup toScoreSequence2;
+
+    private ConditionalCommand autoCommand;
 
     private Pose2d startPosition = new Pose2d(-36, -64, Math.toRadians(-90));
 
@@ -238,7 +241,7 @@ public class AutoRedFar extends CommandOpMode {
                 toScoreSequence2
         );
 
-        ConditionalCommand autoCommand = new ConditionalCommand(
+        autoCommand = new ConditionalCommand(
                 autoLeft,
                 new ConditionalCommand(
                         autoCenter,
@@ -247,10 +250,14 @@ public class AutoRedFar extends CommandOpMode {
                 ),
                 () -> pipeline.getCaz() == 2
         );
-
-        autoCommand.schedule();
     }
 
+    @Override
+    public void runOnce() {
+        autoCommand.schedule();
+
+        new Thread(() -> camera.closeCameraDevice());
+    }
 
     private void initOpenCV() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
