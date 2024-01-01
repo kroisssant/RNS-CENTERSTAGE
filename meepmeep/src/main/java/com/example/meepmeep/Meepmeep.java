@@ -10,50 +10,54 @@ public class Meepmeep {
 
     TrajectorySequence movStanga;
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
-//        ///MOV STANGA
-//        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-//                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-//                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11.49)
-//                .setDimensions(13.38, 14.76)
-//                .followTrajectorySequence(drive ->
-//                        drive.trajectorySequenceBuilder(new Pose2d(-36, -64, Math.toRadians(-90)))
-//                                .lineToLinearHeading(new Pose2d(-36, -44, Math.toRadians(-90)))
-//                                .lineToLinearHeading(new Pose2d(-45, -22, Math.toRadians(-90)))
-//                                .lineToLinearHeading(new Pose2d(-59, -11.3, Math.toRadians(180)))
-//                                .lineToLinearHeading(new Pose2d(30, -7, Math.toRadians(180)))
-//
-//                                .build()
-//                );
-//
-
-//        //MOV CENTRU
-//        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-//                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-//                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11.49)
-//                .setDimensions(13.38, 14.76)
-//                .followTrajectorySequence(drive ->
-//                        drive.trajectorySequenceBuilder(new Pose2d(-36, -64, Math.toRadians(-90)))
-//                                .lineToLinearHeading(new Pose2d(-36, -14, Math.toRadians(-90)))
-//                                .lineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)))
-//                                .lineToLinearHeading(new Pose2d(30, -7, Math.toRadians(180)))
-//                                .build()
-//                );
-
-
-//        //MOV DREAPTA
+        MeepMeep meepMeep = new MeepMeep(480);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                //MOV STANGA
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11.49)
                 .setDimensions(13.38, 14.76)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-36, -64, Math.toRadians(-90)))
-                                .lineToLinearHeading(new Pose2d(-36, -14, Math.toRadians(-90)))
-                                .lineToLinearHeading(new Pose2d(-35.5, -7, Math.toRadians(-90)))
-                                .lineToLinearHeading(new Pose2d(-59, -11.3, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(-36, -33, Math.toRadians(-90)))
+                                .turn(Math.toRadians(90))
+                                .lineToLinearHeading(new Pose2d(-24, -33, Math.toRadians(0)))
+                                .lineToLinearHeading(new Pose2d(-36, -33, Math.toRadians(0)))
+                                .lineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)))
+                                .lineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)))
+                                .lineToLinearHeading(new Pose2d(30, -7, Math.toRadians(180)))
 
                                 .build()
                 );
+
+
+        //MOV CENTRU
+        // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+        /*.setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11.49)
+        .setDimensions(13.38, 14.76)
+        .followTrajectorySequence(drive ->
+                drive.trajectorySequenceBuilder(new Pose2d(-36, -64, Math.toRadians(-90)))
+                        .lineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)))
+                        .lineToLinearHeading(new Pose2d(-36, -14, Math.toRadians(-90)))
+                        .lineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)))
+                        .lineToLinearHeading(new Pose2d(30, -7, Math.toRadians(180)))
+                        .lineToLinearHeading(new Pose2d(50, -35, Math.toRadians(180)))
+
+                        .build()
+        );*/
+
+
+        /*MOV DREAPTA
+        // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+        .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11.49)
+        .setDimensions(13.38, 14.76)
+        .followTrajectorySequence(drive ->
+                drive.trajectorySequenceBuilder(new Pose2d(-36, -64, Math.toRadians(-90)))
+                        .lineToLinearHeading(new Pose2d(-36, -14, Math.toRadians(-90)))
+                        .lineToLinearHeading(new Pose2d(-35.5, -7, Math.toRadians(-90)))
+                        .lineToLinearHeading(new Pose2d(-59, -11.3, Math.toRadians(180)))
+
+                        .build()
+        );*/
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)

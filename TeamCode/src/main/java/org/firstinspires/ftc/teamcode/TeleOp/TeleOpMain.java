@@ -118,7 +118,7 @@ public class TeleOpMain extends CommandOpMode {
                         new ConditionalCommand(
                                 pressureOpen,
                                 pressureClose,
-                                () -> { return scoringSubsystem.pressureToggle;}
+                                () -> scoringSubsystem.pressureToggle
                         )
                 );
 
