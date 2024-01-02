@@ -22,6 +22,8 @@
             <Servo name = "bratStanga" port = "2" />
             <Servo name = "pivot" port = "4" />
             <Servo name = "pressureStanga" port = "0" />
+            <Servo name = "dropdown" port = "1" />
+
         </LynxModule>
 
     </LynxUsbDevice>

@@ -48,4 +48,7 @@ public class Constants {
 
     public static double NOMINAL_VOLTAGE = 13;
 
+    public static double DROPDOWN_JOS = 0;
+    public static double DROPDOWN_SUS = 0.3;
+
 }

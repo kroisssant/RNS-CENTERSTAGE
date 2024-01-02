@@ -27,9 +27,12 @@ public class test extends LinearOpMode {
 
     Servo pressureDreapta, pressureStanga, bratStanga, bratDreapta, pivot;
 
+    Servo dropdown;
+
     DcMotorEx glisieraDreapta, glisieraStanga, intake;
 
     public static double pressureDreaptaV = 0;
+    public static double dropdownPos = 0;
     public static double pressureStangaV = 0;
 
 
@@ -51,6 +54,7 @@ public class test extends LinearOpMode {
         bratDreapta = hardwareMap.get(Servo.class, "bratDreapta");
         bratStanga = hardwareMap.get(Servo.class, "bratStanga");
         pivot = hardwareMap.get(Servo.class, "pivot");
+        dropdown = hardwareMap.get(Servo.class, "dropdown");
 
         glisieraDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         glisieraStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -64,10 +68,8 @@ public class test extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()&& !isStopRequested()){
-            if(gamepad1.a) {
-                pressureStanga.setPosition(pressureStangaV);
-                sleep(350);
-            }
+
+            dropdown.setPosition(dropdownPos);
 
             if(gamepad1.b){
                 pressureDreapta.setPosition(pressureDreaptaV);
