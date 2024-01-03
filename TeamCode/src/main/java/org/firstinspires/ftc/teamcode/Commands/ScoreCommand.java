@@ -32,7 +32,7 @@ public class ScoreCommand extends SequentialCommandGroup {
                     scoringSubsystem.setPivot(Constants.PIVOT_JOS);
                 }),
 
-                new WaitCommand(Constants.WAIT_FOR_PIVOT_DOWN),
+                new WaitCommand(500),
 
                 new InstantCommand(() -> {
                     glisiereSubsystem.setGlisiereFinalPosition(setPoint);

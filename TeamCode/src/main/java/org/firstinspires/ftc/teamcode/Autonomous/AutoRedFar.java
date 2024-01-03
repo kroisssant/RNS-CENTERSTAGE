@@ -83,11 +83,11 @@ public class AutoRedFar extends CommandOpModeAuto {
         drive.setVision(false);
 
         MovCentruPlace = drive.trajectorySequenceBuilder(startPosition)
-                .lineToLinearHeading(new Pose2d(-36, -4, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-36, -9, Math.toRadians(90)))
                 .build();
 
         MovLeftPlace = drive.trajectorySequenceBuilder(startPosition)
-                .lineToLinearHeading(new Pose2d(-45, -22, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-45, -35, Math.toRadians(90)))
                 .build();
 
         MovRightPlace = drive.trajectorySequenceBuilder(startPosition)
@@ -99,7 +99,7 @@ public class AutoRedFar extends CommandOpModeAuto {
                 .build();
 
         MovCentruMoveToStack = drive.trajectorySequenceBuilder(MovCentruPlace.end())
-                .lineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-63, -25, Math.toRadians(180)))
                 .build();
 
         MovRightMoveToStack = drive.trajectorySequenceBuilder(MovRightPlace.end())
@@ -205,41 +205,68 @@ public class AutoRedFar extends CommandOpModeAuto {
         //caz center
          autoCenter = new SequentialCommandGroup(
                 new InstantCommand(() -> drive.setPoseEstimate(startPosition)),
+
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitCommand(250),
+                                new WaitCommand(300),
 
                                 new InstantCommand(() -> {
                                     scoringSubsystem.setPivot(Constants.PIVOT_SUS);
                                 }),
 
-//                new WaitCommand(Constants.WAIT_FOR_PIVOT),
+                                new WaitCommand(400),
 
                                 new InstantCommand(()-> {
                                     scoringSubsystem.setBratPos(1);
                                     glisiereSubsystem.setGlisiereFinalPosition(100);
+                                    intakeSubsystem.dropdownToggle = false;
                                 }),
 
                                 new WaitCommand(100)
-                                )  ,
+                        ),
                         new RoadRunnerCommand(drive, MovCentruPlace)
                 ),
+
                 new SequentialCommandGroup(
                         new InstantCommand(() -> {
+                            intakeSubsystem.setDropdown(0.17);
                             scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
-//                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
                             scoringSubsystem.pressureToggle = false;
                         }),
-                        new WaitCommand(500),
-                        new ScoreCommand(Constants.GLISIERA_DOWN, scoringSubsystem, glisiereSubsystem)
+
+                       new InstantCommand(()-> {
+                           scoringSubsystem.setBratPos(0);
+                       }),
+
+                       new WaitCommand(2000),
+
+
+                       new InstantCommand(() -> {
+                            scoringSubsystem.setPivot(Constants.PIVOT_JOS);
+                        }),
+
+                       new InstantCommand(() -> {
+                           scoringSubsystem.setPivot(Constants.BRAT_JOS);
+                       }),
+
+
+                        new InstantCommand(() -> {
+                            glisiereSubsystem.setGlisiereFinalPosition(Constants.GLISIERA_DOWN);
+                        }),
+
+
+                        new WaitCommand(500)
                 ),
+
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> intakeSubsystem.dropdownDown()),
                         new InstantCommand(() -> intakeSubsystem.runFwd()),
                         new RoadRunnerCommand(drive, MovCentruMoveToStack)
                 ),
+
                 new SequentialCommandGroup(
+                        new InstantCommand(()-> intakeSubsystem.setDropdown(0.15)),
                         new WaitCommand(500),
+                        new InstantCommand(()-> intakeSubsystem.setDropdown(0.18)),
                         new InstantCommand(() -> {
                             scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
                             scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);

@@ -23,6 +23,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     }
 
+    public void setDropdown(double pos){
+        dropdown.setPosition(pos);
+    }
+
     public void setIntakePower(double power){
         motorIntake.set(power);
     }
