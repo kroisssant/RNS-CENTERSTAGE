@@ -122,6 +122,15 @@ public class TeleOpMain extends CommandOpMode {
                         )
                 );
 
+        driver1.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(
+                        new ConditionalCommand(
+                                new InstantCommand(()->intakeSubsystem.dropdownUp()),
+                                new InstantCommand(()->intakeSubsystem.dropdownDown()),
+                                intakeSubsystem::isDropDownDown
+                        )
+                );
+
         driver1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whileHeld(new InstantCommand(intakeSubsystem::runFwd))
                 .whenReleased(new InstantCommand(intakeSubsystem::end));
@@ -132,7 +141,5 @@ public class TeleOpMain extends CommandOpMode {
 
         new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP).whenPressed(toScoreSequence1);
         new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN).whenPressed(toScoreSequence2);
-
-
     }
 }

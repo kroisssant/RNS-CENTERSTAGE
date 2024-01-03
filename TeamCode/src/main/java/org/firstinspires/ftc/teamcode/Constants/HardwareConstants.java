@@ -13,4 +13,5 @@ public class HardwareConstants {
     public static final String ID_PIVOT = "pivot";
     public static final String ID_BRAT_DREAPTA = "bratDreapta";
     public static final String ID_BRAT_STANGA = "bratStanga";
+    public static final String ID_DROPDOWN = "dropdown";
 }

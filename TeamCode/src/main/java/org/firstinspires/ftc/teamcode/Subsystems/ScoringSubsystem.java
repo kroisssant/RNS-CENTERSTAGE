@@ -30,6 +30,7 @@ public class ScoringSubsystem extends SubsystemBase {
         setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
         setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
         pivot.setPosition(Constants.PIVOT_JOS);
+        setBratPos(0.07);
     }
 
     public void setBratPos(double position){

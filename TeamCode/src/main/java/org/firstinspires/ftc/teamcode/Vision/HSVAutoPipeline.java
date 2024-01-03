@@ -32,7 +32,7 @@ public class HSVAutoPipeline extends OpenCvPipeline {
     public static double THRESHOLD = 0.2;
     double[] c;
     private int color = 1;
-    public static int caz = 2; //default
+    public static int caz = 1;
 
     public HSVAutoPipeline(int Color) {
         color = Color;
@@ -95,14 +95,9 @@ public class HSVAutoPipeline extends OpenCvPipeline {
                 new Scalar(255, 0, 0)
         );
 
-        boolean isCenter;
-        boolean isLeft = leftValue > (THRESHOLD -0.1);
-        boolean isRight = rightValue > (THRESHOLD - 0.1);
-        if(1 > centerValue && centerValue > (THRESHOLD -0.1)) {
-            isCenter = true;
-        } else {
-            isCenter = false;
-        }
+        boolean isCenter = centerValue > THRESHOLD;
+        boolean isLeft = leftValue > THRESHOLD;
+        boolean isRight = rightValue > THRESHOLD;
 
 
         System.out.println("isRight" + isRight);
@@ -135,14 +130,9 @@ public class HSVAutoPipeline extends OpenCvPipeline {
             );
         }
         else {
-            if(Color == 1) {
-                caz = 2;
-            }
-            if(Color == 2) {
-                caz = 3;
-            }
-
+            caz = 1;
         }
+
         left.release();
         right.release();
         center.release();

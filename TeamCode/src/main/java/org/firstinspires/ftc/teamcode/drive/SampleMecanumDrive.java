@@ -212,12 +212,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
 
-        double percentageControlEffort = elapsedTime.now(TimeUnit.SECONDS) / trajectorySequenceRunner.currentTrajectorySequence.duration();
-
-        Pose2d driveSignalVel = signal.getVel().times(1 - percentageControlEffort).plus(goToAprilTagPower.times(Constants.APRIL_TAG_MAX_VEL).times(percentageControlEffort));
-        Pose2d driveSignalAccel = signal.getAccel().times(1 - percentageControlEffort).plus(goToAprilTagPower.times(Constants.APRIL_TAG_MAX_ACC).times(percentageControlEffort));
-
         if(this.vision) {
+            double percentageControlEffort = elapsedTime.now(TimeUnit.SECONDS) / trajectorySequenceRunner.currentTrajectorySequence.duration();
+            Pose2d driveSignalVel = signal.getVel().times(1 - percentageControlEffort).plus(goToAprilTagPower.times(Constants.APRIL_TAG_MAX_VEL).times(percentageControlEffort));
+            Pose2d driveSignalAccel = signal.getAccel().times(1 - percentageControlEffort).plus(goToAprilTagPower.times(Constants.APRIL_TAG_MAX_ACC).times(percentageControlEffort));
+
             if (signal != null) setDriveSignal(
                     new DriveSignal(
                             driveSignalVel,

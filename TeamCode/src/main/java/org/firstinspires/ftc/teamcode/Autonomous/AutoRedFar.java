@@ -2,25 +2,19 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Commands.DriveCommand;
+import org.firstinspires.ftc.teamcode.Commands.RoadRunnerCommand;
+import org.firstinspires.ftc.teamcode.Commands.ScoreCommand;
+import org.firstinspires.ftc.teamcode.Commands.ToScoreCommand;
 import org.firstinspires.ftc.teamcode.Constants.Constants;
-import org.firstinspires.ftc.teamcode.Constants.HardwareConstants;
-import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.GlisiereSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ScoringSubsystem;
@@ -28,12 +22,9 @@ import org.firstinspires.ftc.teamcode.Utils.CommandOpModeAuto;
 import org.firstinspires.ftc.teamcode.Vision.HSVAutoPipeline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-
-import java.util.Timer;
 
 @Autonomous
 public class AutoRedFar extends CommandOpModeAuto {
@@ -48,22 +39,19 @@ public class AutoRedFar extends CommandOpModeAuto {
     private InstantCommand glisieraUp;
     private InstantCommand glisieraDown;
 
-    private SequentialCommandGroup toScoreSequence1;
-    private SequentialCommandGroup toScoreSequence2;
+    private SequentialCommandGroup toScoreSequence;
+    private SequentialCommandGroup scoreSequence;
 
     private ConditionalCommand autoCommand;
 
-    private Pose2d startPosition = new Pose2d(-36, -64, Math.toRadians(-90));
+    private Pose2d startPosition = new Pose2d(-40, -64, Math.toRadians(90));
 
     private TrajectorySequence MovLeftPlace;
     private TrajectorySequence MovCentruPlace;
     private TrajectorySequence MovRightPlace;
-    private TrajectorySequence MovLeftMoveToStack1;
-    private TrajectorySequence MovCentruMoveToStack1;
-    private TrajectorySequence MovRightMoveToStack1;
-    private TrajectorySequence MovLeftMoveToStack2;
-    private TrajectorySequence MovCentruMoveToStack2;
-    private TrajectorySequence MovRightMoveToStack2;
+    private TrajectorySequence MovLeftMoveToStack;
+    private TrajectorySequence MovCentruMoveToStack;
+    private TrajectorySequence MovRightMoveToStack;
     private TrajectorySequence StackToBackboard1;
     private TrajectorySequence StackToBackboardLeft;
     private TrajectorySequence StackToBackboardCenter;
@@ -72,69 +60,64 @@ public class AutoRedFar extends CommandOpModeAuto {
     private HSVAutoPipeline pipeline = new HSVAutoPipeline(2);
     private OpenCvCamera camera;
 
+    SequentialCommandGroup autoLeft;
+
 
     @Override
     public void initialize() {
-        initOpenCV();
+        //initOpenCV();
 
         glisiereSubsystem = new GlisiereSubsystem(hardwareMap, telemetry);
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         scoringSubsystem = new ScoringSubsystem(hardwareMap);
 
+        scoringSubsystem.pressureClose();
+        intakeSubsystem.dropdownUp();
+
+        scoringSubsystem.setBratPos(0.35);
+        scoringSubsystem.setPivot(Constants.PIVOT_SUS);
+
         drive = new SampleMecanumDrive(hardwareMap);
+        drive.setVision(false);
 
         MovCentruPlace = drive.trajectorySequenceBuilder(startPosition)
-                .lineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-36, -14, Math.toRadians(90)))
                 .build();
 
         MovLeftPlace = drive.trajectorySequenceBuilder(startPosition)
-                .lineToLinearHeading(new Pose2d(-45, -22, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-45, -22, Math.toRadians(90)))
                 .build();
 
         MovRightPlace = drive.trajectorySequenceBuilder(startPosition)
-                .lineToLinearHeading(new Pose2d(-36, -33, Math.toRadians(-90)))
-                .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-24, -33, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-36, -33, Math.toRadians(180)))
                 .build();
 
-        MovLeftMoveToStack1 = drive.trajectorySequenceBuilder(MovLeftPlace.end())
-                .lineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(-90)))
+        MovLeftMoveToStack = drive.trajectorySequenceBuilder(MovLeftPlace.end())
+                .splineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
-        MovCentruMoveToStack1 = drive.trajectorySequenceBuilder(MovCentruPlace.end())
-                .lineToLinearHeading(new Pose2d(-36, -14, Math.toRadians(-90)))
-                .build();
-
-        MovRightMoveToStack1 = drive.trajectorySequenceBuilder(MovRightPlace.end())
-                .lineToLinearHeading(new Pose2d(-36, -33, Math.toRadians(0)))
-                .build();
-
-        MovLeftMoveToStack2 = drive.trajectorySequenceBuilder(MovLeftMoveToStack1.end())
+        MovCentruMoveToStack = drive.trajectorySequenceBuilder(MovCentruPlace.end())
                 .lineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)))
                 .build();
 
-        MovCentruMoveToStack2 = drive.trajectorySequenceBuilder(MovCentruMoveToStack1.end())
-                .lineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)))
+        MovRightMoveToStack = drive.trajectorySequenceBuilder(MovRightPlace.end())
+                .setTangent(Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)), Math.toRadians(180))
                 .build();
 
-        MovRightMoveToStack2 = drive.trajectorySequenceBuilder(MovRightMoveToStack1.end())
-                .lineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(-60, -12, Math.toRadians(180)))
-                .build();
-
-        StackToBackboard1 = drive.trajectorySequenceBuilder(MovCentruMoveToStack2.end())
+        StackToBackboard1 = drive.trajectorySequenceBuilder(MovCentruMoveToStack.end())
                 .lineToLinearHeading(new Pose2d(30, -7, Math.toRadians(180)))
                 .build();
 
-        StackToBackboardLeft = drive.trajectorySequenceBuilder(MovCentruMoveToStack2.end())
+        StackToBackboardLeft = drive.trajectorySequenceBuilder(StackToBackboard1.end())
                 .lineToLinearHeading(new Pose2d(50, -30, Math.toRadians(180)))
                 .build();
 
-        StackToBackboardCenter = drive.trajectorySequenceBuilder(MovCentruMoveToStack2.end())
+        StackToBackboardCenter = drive.trajectorySequenceBuilder(StackToBackboard1.end())
                 .lineToLinearHeading(new Pose2d(50, -35, Math.toRadians(180)))
                 .build();
 
-        StackToBackboardRight = drive.trajectorySequenceBuilder(MovCentruMoveToStack2.end())
+        StackToBackboardRight = drive.trajectorySequenceBuilder(StackToBackboard1.end())
                 .lineToLinearHeading(new Pose2d(50, -40, Math.toRadians(180)))
                 .build();
 
@@ -162,99 +145,183 @@ public class AutoRedFar extends CommandOpModeAuto {
             glisiereSubsystem.setGlisiereFinalPosition(Constants.GLISIERA_DOWN);
         });
 
-        toScoreSequence1 = new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    scoringSubsystem.setPivot(Constants.PIVOT_SUS);
-                }),
-
-                new WaitCommand(Constants.WAIT_FOR_PIVOT),
-
-                new InstantCommand(()-> {
-                    scoringSubsystem.setBratPos(Constants.BRAT_SUS);
-                    glisiereSubsystem.setGlisiereFinalPosition(Constants.GLISIERA_UP);
-                })
-        );
-
-        toScoreSequence2 = new SequentialCommandGroup(
-                new InstantCommand(()-> {
-                    scoringSubsystem.setBratPos(Constants.BRAT_JOS);
-                    scoringSubsystem.setPivot(Constants.PIVOT_JOS);
-                }),
-
-                new WaitCommand(Constants.WAIT_FOR_PIVOT_DOWN),
-
-                new InstantCommand(() -> {
-                    glisiereSubsystem.setGlisiereFinalPosition(Constants.GLISIERA_DOWN);
-                })
-        );
-
         register(glisiereSubsystem);
 
         //caz left
-        SequentialCommandGroup autoLeft = new SequentialCommandGroup(
+        autoLeft = new SequentialCommandGroup(
                 new InstantCommand(() -> drive.setPoseEstimate(startPosition)),
-                new InstantCommand(() -> drive.followTrajectorySequence(MovLeftPlace)),
-                pressureOpen,
-                new InstantCommand(() -> drive.followTrajectorySequence(MovLeftMoveToStack1)),
-                //ceva chestie sa lasam intakeul jos???????
-                new InstantCommand(() -> drive.followTrajectorySequence(MovLeftMoveToStack2)),
-                new InstantCommand(() -> intakeSubsystem.runFwd()),
-                new InstantCommand(() -> drive.followTrajectorySequence(StackToBackboard1)),
                 new ParallelCommandGroup(
-                        toScoreSequence1,
-                        new InstantCommand(() -> drive.followTrajectorySequence(StackToBackboardLeft))
+                        new RoadRunnerCommand(drive, MovLeftPlace),
+                        new ToScoreCommand(100, 250, scoringSubsystem, glisiereSubsystem)
                 ),
-                toScoreSequence2
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+                            scoringSubsystem.pressureToggle = false;
+                        }),
+                        new WaitCommand(500),
+                        new ScoreCommand(Constants.GLISIERA_DOWN, scoringSubsystem, glisiereSubsystem)
+                ),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> intakeSubsystem.dropdownDown()),
+                        new InstantCommand(() -> intakeSubsystem.runFwd()),
+                        new RoadRunnerCommand(drive, MovLeftMoveToStack)
+                ),
+                new SequentialCommandGroup(
+                        new WaitCommand(500),
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);
+                            scoringSubsystem.pressureToggle = true;
+                        }),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> intakeSubsystem.runRvs())
+                ),
+                new ParallelCommandGroup(
+                        new SequentialCommandGroup(
+                                new WaitCommand(200),
+                                new InstantCommand(() -> intakeSubsystem.end()),
+                                new InstantCommand(() -> intakeSubsystem.dropdownUp())
+                        ),
+                        new RoadRunnerCommand(drive, StackToBackboard1)
+                ),
+                new ParallelCommandGroup(
+                        new ToScoreCommand(1000, 1500, scoringSubsystem, glisiereSubsystem),
+                        new RoadRunnerCommand(drive, StackToBackboardLeft)
+                ),
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+                            scoringSubsystem.pressureToggle = false;
+                        }),
+                        new WaitCommand(250),
+                        new ScoreCommand(Constants.GLISIERA_DOWN, scoringSubsystem, glisiereSubsystem)
+                )
         );
 
         //caz center
         SequentialCommandGroup autoCenter = new SequentialCommandGroup(
                 new InstantCommand(() -> drive.setPoseEstimate(startPosition)),
-                new InstantCommand(() -> drive.followTrajectorySequence(MovCentruPlace)),
-                pressureOpen,
-                new InstantCommand(() -> drive.followTrajectorySequence(MovCentruMoveToStack1)),
-                //ceva chestie sa lasam intakeul jos???????
-                new InstantCommand(() -> drive.followTrajectorySequence(MovCentruMoveToStack2)),
-                new InstantCommand(() -> intakeSubsystem.runFwd()),
-                new InstantCommand(() -> drive.followTrajectorySequence(StackToBackboard1)),
                 new ParallelCommandGroup(
-                        toScoreSequence1,
-                        new InstantCommand(() -> drive.followTrajectorySequence(StackToBackboardCenter))
+                        new ToScoreCommand(100, 250, scoringSubsystem, glisiereSubsystem),
+                        new RoadRunnerCommand(drive, MovCentruPlace)
                 ),
-                toScoreSequence2
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+                            scoringSubsystem.pressureToggle = false;
+                        }),
+                        new WaitCommand(500),
+                        new ScoreCommand(Constants.GLISIERA_DOWN, scoringSubsystem, glisiereSubsystem)
+                ),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> intakeSubsystem.dropdownDown()),
+                        new InstantCommand(() -> intakeSubsystem.runFwd()),
+                        new RoadRunnerCommand(drive, MovCentruMoveToStack)
+                ),
+                new SequentialCommandGroup(
+                        new WaitCommand(500),
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);
+                            scoringSubsystem.pressureToggle = true;
+                        }),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> intakeSubsystem.runRvs())
+                ),
+                new ParallelCommandGroup(
+                        new RoadRunnerCommand(drive, StackToBackboard1),
+                        new SequentialCommandGroup(
+                                new WaitCommand(200),
+                                new InstantCommand(() -> intakeSubsystem.end()),
+                                new InstantCommand(() -> intakeSubsystem.dropdownUp())
+                        )
+                ),
+                new ParallelCommandGroup(
+                        new ToScoreCommand(1000, 1500, scoringSubsystem, glisiereSubsystem),
+                        new RoadRunnerCommand(drive, StackToBackboardCenter)
+                ),
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+                            scoringSubsystem.pressureToggle = false;
+                        }),
+                        new WaitCommand(250),
+                        new ScoreCommand(Constants.GLISIERA_DOWN, scoringSubsystem, glisiereSubsystem)
+                )
         );
 
         //caz right
         SequentialCommandGroup autoRight = new SequentialCommandGroup(
                 new InstantCommand(() -> drive.setPoseEstimate(startPosition)),
-                new InstantCommand(() -> drive.followTrajectorySequence(MovRightPlace)),
-                pressureOpen,
-                new InstantCommand(() -> drive.followTrajectorySequence(MovRightMoveToStack1)),
-                //ceva chestie sa lasam intakeul jos???????
-                new InstantCommand(() -> drive.followTrajectorySequence(MovRightMoveToStack2)),
-                new InstantCommand(() -> intakeSubsystem.runFwd()),
-                new InstantCommand(() -> drive.followTrajectorySequence(StackToBackboard1)),
-                new ParallelCommandGroup(
-                        toScoreSequence1,
-                        new InstantCommand(() -> drive.followTrajectorySequence(StackToBackboardRight))
+                new RoadRunnerCommand(drive, MovRightPlace),
+                new SequentialCommandGroup(
+                        new ToScoreCommand(100, 250, scoringSubsystem, glisiereSubsystem),
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+                            scoringSubsystem.pressureToggle = false;
+                        }),
+                        new WaitCommand(500),
+                        new ScoreCommand(Constants.GLISIERA_DOWN, scoringSubsystem, glisiereSubsystem)
                 ),
-                toScoreSequence2
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> intakeSubsystem.dropdownDown()),
+                        new InstantCommand(() -> intakeSubsystem.runFwd()),
+                        new RoadRunnerCommand(drive, MovRightMoveToStack)
+                ),
+                new SequentialCommandGroup(
+                        new WaitCommand(500),
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);
+                            scoringSubsystem.pressureToggle = true;
+                        }),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> intakeSubsystem.runRvs())
+                ),
+                new ParallelCommandGroup(
+                        new RoadRunnerCommand(drive, StackToBackboard1),
+                        new SequentialCommandGroup(
+                                new WaitCommand(500),
+                                new InstantCommand(() -> intakeSubsystem.end()),
+                                new InstantCommand(() -> intakeSubsystem.dropdownUp())
+                        )
+                ),
+                new ParallelCommandGroup(
+                        new ToScoreCommand(Constants.GLISIERA_UP, scoringSubsystem, glisiereSubsystem),
+                        new RoadRunnerCommand(drive, StackToBackboardRight)
+                ),
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> {
+                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
+                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+                            scoringSubsystem.pressureToggle = false;
+                        }),
+                        new WaitCommand(250),
+                        new ScoreCommand(Constants.GLISIERA_DOWN, scoringSubsystem, glisiereSubsystem)
+                )
         );
 
-        autoCommand = new ConditionalCommand(
+        //1 == center, 2 == left, 3 == right default
+        /*autoCommand = new ConditionalCommand(
                 autoLeft,
                 new ConditionalCommand(
-                        autoCenter,
                         autoRight,
-                        () -> pipeline.getCaz() == 1
+                        autoCenter,
+                        () -> pipeline.getCaz() == 3
                 ),
                 () -> pipeline.getCaz() == 2
-        );
+        );*/
     }
 
     @Override
     public void runOnce() {
-        autoCommand.schedule();
+        autoLeft.schedule();
 
         new Thread(() -> camera.closeCameraDevice());
     }
