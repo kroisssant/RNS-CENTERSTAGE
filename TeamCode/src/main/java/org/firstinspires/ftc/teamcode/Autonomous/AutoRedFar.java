@@ -61,6 +61,8 @@ public class AutoRedFar extends CommandOpModeAuto {
     private OpenCvCamera camera;
 
     SequentialCommandGroup autoLeft;
+    SequentialCommandGroup autoCenter;
+    SequentialCommandGroup autoRight;
 
 
     @Override
@@ -74,14 +76,14 @@ public class AutoRedFar extends CommandOpModeAuto {
         scoringSubsystem.pressureClose();
         intakeSubsystem.dropdownUp();
 
-        scoringSubsystem.setBratPos(0.35);
-        scoringSubsystem.setPivot(Constants.PIVOT_SUS);
+        scoringSubsystem.setBratPos(0.25);
+        scoringSubsystem.setPivot(Constants.PIVOT_SUS - 0.2);
 
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setVision(false);
 
         MovCentruPlace = drive.trajectorySequenceBuilder(startPosition)
-                .lineToLinearHeading(new Pose2d(-36, -14, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-36, -4, Math.toRadians(90)))
                 .build();
 
         MovLeftPlace = drive.trajectorySequenceBuilder(startPosition)
@@ -152,11 +154,10 @@ public class AutoRedFar extends CommandOpModeAuto {
                 new InstantCommand(() -> drive.setPoseEstimate(startPosition)),
                 new ParallelCommandGroup(
                         new RoadRunnerCommand(drive, MovLeftPlace),
-                        new ToScoreCommand(100, 250, scoringSubsystem, glisiereSubsystem)
+                        new ToScoreCommand(100, Constants.PIVOT_JOS, 250, scoringSubsystem, glisiereSubsystem)
                 ),
                 new SequentialCommandGroup(
                         new InstantCommand(() -> {
-                            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
                             scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
                             scoringSubsystem.pressureToggle = false;
                         }),
@@ -187,7 +188,7 @@ public class AutoRedFar extends CommandOpModeAuto {
                         new RoadRunnerCommand(drive, StackToBackboard1)
                 ),
                 new ParallelCommandGroup(
-                        new ToScoreCommand(1000, 1500, scoringSubsystem, glisiereSubsystem),
+                        new ToScoreCommand(1000, Constants.PIVOT_SUS, 1500, scoringSubsystem, glisiereSubsystem),
                         new RoadRunnerCommand(drive, StackToBackboardLeft)
                 ),
                 new SequentialCommandGroup(
@@ -202,16 +203,31 @@ public class AutoRedFar extends CommandOpModeAuto {
         );
 
         //caz center
-        SequentialCommandGroup autoCenter = new SequentialCommandGroup(
+         autoCenter = new SequentialCommandGroup(
                 new InstantCommand(() -> drive.setPoseEstimate(startPosition)),
                 new ParallelCommandGroup(
-                        new ToScoreCommand(100, 250, scoringSubsystem, glisiereSubsystem),
+                        new SequentialCommandGroup(
+                                new WaitCommand(250),
+
+                                new InstantCommand(() -> {
+                                    scoringSubsystem.setPivot(Constants.PIVOT_SUS);
+                                }),
+
+//                new WaitCommand(Constants.WAIT_FOR_PIVOT),
+
+                                new InstantCommand(()-> {
+                                    scoringSubsystem.setBratPos(1);
+                                    glisiereSubsystem.setGlisiereFinalPosition(100);
+                                }),
+
+                                new WaitCommand(100)
+                                )  ,
                         new RoadRunnerCommand(drive, MovCentruPlace)
                 ),
                 new SequentialCommandGroup(
                         new InstantCommand(() -> {
                             scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
-                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
+//                            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
                             scoringSubsystem.pressureToggle = false;
                         }),
                         new WaitCommand(500),
@@ -241,7 +257,7 @@ public class AutoRedFar extends CommandOpModeAuto {
                         )
                 ),
                 new ParallelCommandGroup(
-                        new ToScoreCommand(1000, 1500, scoringSubsystem, glisiereSubsystem),
+                        new ToScoreCommand(1000,Constants.PIVOT_SUS,  1500, scoringSubsystem, glisiereSubsystem),
                         new RoadRunnerCommand(drive, StackToBackboardCenter)
                 ),
                 new SequentialCommandGroup(
@@ -256,11 +272,11 @@ public class AutoRedFar extends CommandOpModeAuto {
         );
 
         //caz right
-        SequentialCommandGroup autoRight = new SequentialCommandGroup(
+         autoRight = new SequentialCommandGroup(
                 new InstantCommand(() -> drive.setPoseEstimate(startPosition)),
                 new RoadRunnerCommand(drive, MovRightPlace),
                 new SequentialCommandGroup(
-                        new ToScoreCommand(100, 250, scoringSubsystem, glisiereSubsystem),
+                        new ToScoreCommand(100, Constants.PIVOT_JOS, 250, scoringSubsystem, glisiereSubsystem),
                         new InstantCommand(() -> {
                             scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
                             scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_DESCHIS);
@@ -321,7 +337,7 @@ public class AutoRedFar extends CommandOpModeAuto {
 
     @Override
     public void runOnce() {
-        autoLeft.schedule();
+        autoCenter.schedule();
 
         new Thread(() -> camera.closeCameraDevice());
     }

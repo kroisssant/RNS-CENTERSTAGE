@@ -19,9 +19,6 @@ public class DriveSubsystem extends SubsystemBase {
         rightFront = new RNSMotor(hardwareMap, HardwareConstants.ID_RIGHT_FRONT_MOTOR);
         rightRear = new RNSMotor(hardwareMap, HardwareConstants.ID_RIGHT_REAR_MOTOR);
 
-        rightFront.setInverted(true);
-        rightRear.setInverted(true);
-
         leftFront.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
         leftRear.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
@@ -42,6 +39,6 @@ public class DriveSubsystem extends SubsystemBase {
         fwd = (Math.abs(fwd) >= 0.1) ? fwd : 0;
         rot = (Math.abs(rot) >= 0.1) ? rot : 0;
 
-        drive.driveRobotCentric(str, fwd, rot, true);
+        drive.driveRobotCentric(str, -fwd, rot, true);
     }
 }

@@ -43,6 +43,9 @@ public class GlisiereSubsystem extends SubsystemBase {
 
         glisieraDreapta.setInverted(true);
 
+        glisieraDreapta.encoder.reset();
+        glisieraStanga.encoder.reset();
+
         glisieraStanga.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
         glisieraDreapta.setZeroPowerBehavior(RNSMotor.ZeroPowerBehavior.BRAKE);
 
