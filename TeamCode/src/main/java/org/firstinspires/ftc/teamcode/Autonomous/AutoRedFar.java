@@ -77,13 +77,13 @@ public class AutoRedFar extends CommandOpModeAuto {
         intakeSubsystem.dropdownUp();
 
         scoringSubsystem.setBratPos(0.25);
-        scoringSubsystem.setPivot(Constants.PIVOT_SUS - 0.2);
+        scoringSubsystem.setPivot(Constants.PIVOT_SUS - 0.4);
 
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setVision(false);
 
         MovCentruPlace = drive.trajectorySequenceBuilder(startPosition)
-                .lineToLinearHeading(new Pose2d(-36, -9, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-36, -6, Math.toRadians(90)))
                 .build();
 
         MovLeftPlace = drive.trajectorySequenceBuilder(startPosition)
@@ -99,7 +99,7 @@ public class AutoRedFar extends CommandOpModeAuto {
                 .build();
 
         MovCentruMoveToStack = drive.trajectorySequenceBuilder(MovCentruPlace.end())
-                .lineToLinearHeading(new Pose2d(-63, -25, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-61, -21, Math.toRadians(180)))
                 .build();
 
         MovRightMoveToStack = drive.trajectorySequenceBuilder(MovRightPlace.end())
@@ -211,68 +211,83 @@ public class AutoRedFar extends CommandOpModeAuto {
                                 new WaitCommand(300),
 
                                 new InstantCommand(() -> {
-                                    scoringSubsystem.setPivot(Constants.PIVOT_SUS);
+//                                    scoringSubsystem.setPivot(Constants.PIVOT_SUS);
                                 }),
 
-                                new WaitCommand(400),
+                                new WaitCommand(100),
 
                                 new InstantCommand(()-> {
+                                    scoringSubsystem.setPivot(Constants.PIVOT_SUS);
                                     scoringSubsystem.setBratPos(1);
-                                    glisiereSubsystem.setGlisiereFinalPosition(100);
+                                    glisiereSubsystem.setGlisiereFinalPosition(500);
                                     intakeSubsystem.dropdownToggle = false;
                                 }),
 
-                                new WaitCommand(100)
+                                new WaitCommand(400)
                         ),
                         new RoadRunnerCommand(drive, MovCentruPlace)
                 ),
 
                 new SequentialCommandGroup(
                         new InstantCommand(() -> {
-                            intakeSubsystem.setDropdown(0.17);
+                            intakeSubsystem.setDropdown(0);
                             scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
                             scoringSubsystem.pressureToggle = false;
                         }),
 
-                       new InstantCommand(()-> {
-                           scoringSubsystem.setBratPos(0);
+                        new WaitCommand(500),
+
+                        new InstantCommand(()-> {
+//                           scoringSubsystem.setBratPos(0.9);
+                           scoringSubsystem.pressureClose();
+
                        }),
 
-                       new WaitCommand(2000),
+                       new WaitCommand(500)
+                ),
 
+                new ParallelCommandGroup(
 
-                       new InstantCommand(() -> {
-                            scoringSubsystem.setPivot(Constants.PIVOT_JOS);
-                        }),
+                        new SequentialCommandGroup(
 
-                       new InstantCommand(() -> {
-                           scoringSubsystem.setPivot(Constants.BRAT_JOS);
-                       }),
+                            new InstantCommand(() -> {
+                                scoringSubsystem.setBratPos(0.02);
+                                }),
 
+                            new InstantCommand(() -> {
+                                scoringSubsystem.setPivot(0);
+                            }),
 
-                        new InstantCommand(() -> {
-                            glisiereSubsystem.setGlisiereFinalPosition(Constants.GLISIERA_DOWN);
-                        }),
+                            new WaitCommand(1800),
 
+                            new InstantCommand(() -> {
+                                glisiereSubsystem.setGlisiereFinalPosition(0);
+                                scoringSubsystem.setBratPos(0.03);
+                            }),
 
-                        new WaitCommand(500)
+                            new InstantCommand(()->intakeSubsystem.setDropdown(0.1))
+                        ),
+
+                        new RoadRunnerCommand(drive, MovCentruMoveToStack)
                 ),
 
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intakeSubsystem.runFwd()),
-                        new RoadRunnerCommand(drive, MovCentruMoveToStack)
+                        new InstantCommand(() -> scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS)),
+                        new InstantCommand(() -> scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS)),
+                        new InstantCommand(()-> intakeSubsystem.setDropdown(0.13))
                 ),
 
                 new SequentialCommandGroup(
-                        new InstantCommand(()-> intakeSubsystem.setDropdown(0.15)),
                         new WaitCommand(500),
-                        new InstantCommand(()-> intakeSubsystem.setDropdown(0.18)),
                         new InstantCommand(() -> {
                             scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
                             scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);
                             scoringSubsystem.pressureToggle = true;
+                            intakeSubsystem.setDropdown(0.05);
                         }),
-                        new WaitCommand(500),
+                        new WaitCommand(1000),
+                        new InstantCommand(()-> intakeSubsystem.setDropdown(0)),
                         new InstantCommand(() -> intakeSubsystem.runRvs())
                 ),
                 new ParallelCommandGroup(
