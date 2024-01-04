@@ -38,7 +38,7 @@ public class Constants {
     public static double GLISIERA_STANGA_KI = 0;
     public static double GLISIERA_DREAPTA_KI = 0;
 
-    public static double INTAKE_POWER = 0.7;
+    public static double INTAKE_POWER = 0.8;
 
     public static int GLISIERA_UP = 2000;
     public static  int GLISIERA_DOWN = 0;

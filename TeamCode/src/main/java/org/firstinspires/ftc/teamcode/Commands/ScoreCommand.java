@@ -24,12 +24,13 @@ public class ScoreCommand extends SequentialCommandGroup {
     public void createCommand() {
         addCommands(
                 new InstantCommand(()-> {
-                    scoringSubsystem.setBratPos(Constants.BRAT_JOS);
+
+                    scoringSubsystem.setPivot(Constants.PIVOT_JOS);
                 }),
                 new WaitCommand(Constants.WAIT_FOR_BRAT_JOS),
 
                 new InstantCommand(() -> {
-                    scoringSubsystem.setPivot(Constants.PIVOT_JOS);
+                    scoringSubsystem.setBratPos(Constants.BRAT_JOS);
                 }),
 
                 new WaitCommand(500),
