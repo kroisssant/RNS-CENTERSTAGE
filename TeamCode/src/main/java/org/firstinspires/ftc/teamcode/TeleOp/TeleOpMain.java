@@ -35,7 +35,7 @@ public class TeleOpMain extends CommandOpMode {
     GamepadEx driver1;
 
     private InstantCommand pressureOpen;
-    private InstantCommand pressureClose;
+    private SequentialCommandGroup pressureClose;
     private InstantCommand bratUp;
 
     private InstantCommand glisieraUp;
@@ -61,11 +61,21 @@ public class TeleOpMain extends CommandOpMode {
             scoringSubsystem.pressureToggle = false;
         });
 
-        pressureClose = new InstantCommand(() -> {
-            scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
-            scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);
-            scoringSubsystem.pressureToggle = true;
-        });
+        pressureClose = new SequentialCommandGroup(
+            new InstantCommand(() -> scoringSubsystem.setBratPos(Constants.BRAT_JOS-0.02)),
+
+            new WaitCommand(100),
+
+            new InstantCommand(() -> {
+                scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_INCHIS);
+                scoringSubsystem.setPressureStangaPos(Constants.PRESSURE_STANGA_INCHIS);
+                scoringSubsystem.pressureToggle = true;
+            }),
+
+            new WaitCommand(150),
+
+            new InstantCommand(() -> scoringSubsystem.setBratPos(Constants.BRAT_JOS))
+        );
 
         bratUp = new InstantCommand(() -> {
             scoringSubsystem.setPivot(Constants.PIVOT_SUS);
