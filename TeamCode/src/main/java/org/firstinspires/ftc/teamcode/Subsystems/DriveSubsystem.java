@@ -2,7 +2,12 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+
+import org.firstinspires.ftc.teamcode.Constants.Constants;
 import org.firstinspires.ftc.teamcode.Utils.RNSMotor;
+
+import com.arcrobotics.ftclib.kinematics.Odometry;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveOdometry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 
@@ -40,5 +45,12 @@ public class DriveSubsystem extends SubsystemBase {
         rot = (Math.abs(rot) >= 0.1) ? rot : 0;
 
         drive.driveRobotCentric(str, -fwd, rot, true);
+    }
+
+    public boolean isMoving() {
+        return leftFront.encoder.getCorrectedVelocity() < Constants.VELO_TOLERANCE
+                && rightFront.encoder.getCorrectedVelocity() < Constants.VELO_TOLERANCE
+                && rightRear.encoder.getCorrectedVelocity() < Constants.VELO_TOLERANCE
+                && leftRear.encoder.getCorrectedVelocity() < Constants.VELO_TOLERANCE;
     }
 }

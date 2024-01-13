@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Constants;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.MecanumDriveKinematics;
 
 @Config
 public class Constants {
@@ -53,4 +54,5 @@ public class Constants {
     public static double DROPDOWN_JOS = 0.3;
     public static double DROPDOWN_SUS = 0;
 
+    public static double VELO_TOLERANCE = 10;
 }

@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Commands.DriveCommand;
+import org.firstinspires.ftc.teamcode.Commands.ScoringSubCommand;
 import org.firstinspires.ftc.teamcode.Constants.Constants;
 import org.firstinspires.ftc.teamcode.Constants.HardwareConstants;
 import org.firstinspires.ftc.teamcode.Subsystems.DriveSubsystem;
@@ -27,12 +28,13 @@ import java.util.Timer;
 @TeleOp
 public class TeleOpMain extends CommandOpMode {
 
-    DriveSubsystem driveSubsystem;
-    GlisiereSubsystem glisiereSubsystem;
-    IntakeSubsystem intakeSubsystem;
-    ScoringSubsystem scoringSubsystem;
-    DriveCommand driveCommand;
-    GamepadEx driver1;
+    private DriveSubsystem driveSubsystem;
+    private GlisiereSubsystem glisiereSubsystem;
+    private IntakeSubsystem intakeSubsystem;
+    private ScoringSubsystem scoringSubsystem;
+    private DriveCommand driveCommand;
+    private ScoringSubCommand scoringSubCommand;
+    private GamepadEx driver1;
 
     private InstantCommand pressureOpen;
     private SequentialCommandGroup pressureClose;
@@ -44,6 +46,7 @@ public class TeleOpMain extends CommandOpMode {
     private SequentialCommandGroup toScoreSequence1;
     private SequentialCommandGroup toScoreSequence2;
 
+
     @Override
     public void initialize() {
         driveSubsystem = new DriveSubsystem(hardwareMap);
@@ -54,6 +57,8 @@ public class TeleOpMain extends CommandOpMode {
         driver1 = new GamepadEx(gamepad1);
 
         driveCommand = new DriveCommand(driveSubsystem, driver1::getLeftY, driver1::getLeftX, driver1::getRightX);
+
+        scoringSubCommand = new ScoringSubCommand(scoringSubsystem, driveSubsystem::isMoving);
 
         pressureOpen = new InstantCommand(() -> {
             scoringSubsystem.setPressureDreaptaPos(Constants.PRESSURE_DREAPTA_DESCHIS);
@@ -116,9 +121,6 @@ public class TeleOpMain extends CommandOpMode {
 
         );
 
-        driveSubsystem.setDefaultCommand(driveCommand);
-        register(glisiereSubsystem);
-
         driver1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(bratUp);
 
@@ -151,5 +153,8 @@ public class TeleOpMain extends CommandOpMode {
 
         new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP).whenPressed(toScoreSequence1);
         new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN).whenPressed(toScoreSequence2);
+
+        driveSubsystem.setDefaultCommand(driveCommand);
+        register(glisiereSubsystem);
     }
 }

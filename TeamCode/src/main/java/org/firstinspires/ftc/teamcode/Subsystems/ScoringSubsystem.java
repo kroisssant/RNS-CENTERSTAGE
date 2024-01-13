@@ -61,4 +61,8 @@ public class ScoringSubsystem extends SubsystemBase {
     public void setPivot(double position){
         pivot.setPosition(position);
     }
+
+    public double getBratPos() {
+        return bratDreapta.getPosition();
+    }
 }
