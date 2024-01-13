@@ -40,7 +40,7 @@ public class DriveConstants {
      * from DriveVelocityPIDTuner.
      */
     public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25 , 0, 9.55, 13);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25 , 0, 10, 13);
 
     //  THIS ARE FOR FTCLIB RAMSETE CONTROLLER
     public static double B = 2.0;
@@ -56,7 +56,7 @@ public class DriveConstants {
     public static double WHEEL_RADIUS = 1.88; // in
     public static double WHEEL_DIAMETER = WHEEL_RADIUS * 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 12.7; // in
+    public static double TRACK_WIDTH = 8.46; // in
 
     // FTCLIB
     public static double DISTANCE_PER_PULSE = WHEEL_DIAMETER * Math.PI / TICKS_PER_REV;
@@ -113,7 +113,7 @@ public class DriveConstants {
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.
      */
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
-            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+            RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
             RevHubOrientationOnRobot.UsbFacingDirection.UP;
 

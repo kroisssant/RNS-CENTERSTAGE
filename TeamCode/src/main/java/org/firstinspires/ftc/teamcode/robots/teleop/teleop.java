@@ -1,170 +1,274 @@
 package org.firstinspires.ftc.teamcode.robots.teleop;
 
+import android.icu.util.UniversalTimeScale;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.arcrobotics.ftclib.command.button.GamepadButton;
+import com.google.blocks.ftcrobotcontroller.runtime.obsolete.VuforiaCurrentGameAccess;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Libs.GAMEPAD;
-import org.firstinspires.ftc.teamcode.Libs.STATE;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Intake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
+import org.firstinspires.ftc.teamcode.robots.constatns.UniversalValues;
+import org.firstinspires.ftc.teamcode.robots.subSystems.GlisieraSubsystem;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.robots.subSystems.ScoringSubsystem;
 
 @TeleOp
 public class teleop extends LinearOpMode {
-    OutTake outtake;
-    Intake intake;
+    GlisieraSubsystem glisieraOutake;
+    ElapsedTime timer;
+    int glisieraTargetPos = 0;
+    statesOuttake reqState = null;
+    statesOuttake outtakeState = statesOuttake.DEFAULT;
+    statesSequence sequenceState = statesSequence.DONE;
+    IntakeSubsystem intake;
+    ScoringSubsystem scoring;
     SampleMecanumDrive drive;
     GAMEPAD GAMEPAD1, GAMEPAD2;
-
-    ElapsedTime timer;
-    STATES robotState = STATES.DEFAULT;
-    STATES reqState = null;
-    double[] powers;
-    boolean commit = false;
-    boolean pressureClosed = false;
-    boolean glisieraRun = false;
-    boolean fromDefault = false;
-    int target, reqTarget;
     @Override
     public void runOpMode() throws InterruptedException {
-        timer = new ElapsedTime();
-        outtake = new OutTake(hardwareMap);
-        intake = new Intake(hardwareMap);
+        telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+        glisieraOutake = new GlisieraSubsystem(this.hardwareMap, this.telemetry);
+        intake = new IntakeSubsystem(this.hardwareMap);
+        scoring = new ScoringSubsystem(this.hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
-        intake.setDropdown(0.25);
-        outtake.setPressureStanga(Variables.pressureStangaOpen);
-        outtake.setPressureDreapta(Variables.pressureDreaptaOpen);
-        outtake.setClaw(Variables.pivotJos);
-        outtake.setBrat(Variables.bratJos);
         GAMEPAD1 = new GAMEPAD(this.gamepad1, telemetry);
         GAMEPAD2 = new GAMEPAD(this.gamepad2, telemetry);
+        scoring.setPressure(UniversalValues.pressure_open);
+        scoring.setBrat(UniversalValues.bratJos);
+        scoring.setTiwst(UniversalValues.twistDef);
+        scoring.setPivot(UniversalValues.pivotJos);
+        timer = new ElapsedTime();
+
         waitForStart();
-        timer.startTime();
         while (opModeIsActive() && !isStopRequested()) {
             GAMEPAD1.run();
             GAMEPAD2.run();
-            telemetry.addData("fromDefault", fromDefault);
-            telemetry.addData("target Glis", outtake.glisieraDreapta.getTargetPosition());
-            telemetry.addData("glis", outtake.getPosition());
-            telemetry.addData("Claw", outtake.claw.getPosition());
-            telemetry.addData("robot state", robotState);
+            driveControl();
+            outake();
             intake();
-            pressure();
-            glisiera();
-            brat();
-            if(GAMEPAD1.right_bumper.value) {
-                drive.setWeightedDrivePower(new Pose2d(
-                        -GAMEPAD1.left_stick_y * 0.3,
-                        -GAMEPAD1.left_stick_x * 0.3,
-                        GAMEPAD1.right_stick_x * 0.3
-                ));
-            } else {
-                drive.setWeightedDrivePower(new Pose2d(
-                        -GAMEPAD1.left_stick_y,
-                        -GAMEPAD1.left_stick_x,
-                        GAMEPAD1.right_stick_x
-                ));
-            }
-            drive.update();
-            telemetry.update();
+            scoring();
+            telemetry();
         }
-
     }
+
+
+    // Intake function
     private void intake() {
-        if(GAMEPAD2.right_trigger > 0.3) {
-            intake.setPower(0.4);
-        } else if(GAMEPAD2.left_trigger > 0.3) {
-            intake.setPower(-0.4);
-        } else if(GAMEPAD2.dpad_down.value) {
-            intake.setPower(0);
+        // d1
+        if(GAMEPAD1.left_trigger > 0.3) {
+            intake.setIntakePower(-UniversalValues.INTAKE_POW);
+            intake.setIntakeMobilPower(UniversalValues.INTAKE_MOBIL_POW);
         } else if(GAMEPAD1.right_trigger > 0.3) {
-            intake.setPower(0.4);
-        } else if(GAMEPAD1.left_trigger > 0.3) {
-            intake.setPower(-0.4);
+            intake.setIntakePower(UniversalValues.INTAKE_POW);
+            intake.setIntakeMobilPower(-UniversalValues.INTAKE_MOBIL_POW);
         } else {
-            intake.setPower(0);
+            intake.setIntakePower(0);
+            intake.setIntakeMobilPower(0);
+        }
+
+        // d2
+        if(GAMEPAD2.dpad_down.toggle) {
+            intake.setDropdown(UniversalValues.DROPDOWN_DOWN);
+        } else if(!GAMEPAD2.dpad_down.toggle) {
+            intake.setDropdown(UniversalValues.DROPDOWN_UP);
+        }
+
+        if(GAMEPAD2.dpad_up.toggle) {
+            intake.setIntakePos(UniversalValues.GLISIERA_INTAKE_FORWARD);
+        } else if(!GAMEPAD2.dpad_up.toggle) {
+            intake.setIntakePos(UniversalValues.GLISIERA_INTAKE_DEFAULT);
         }
     }
-    private void pressure() {
-        if(GAMEPAD1.b.toggle) {
-            outtake.setPressureDreapta(Variables.pressureDreaptaClose);
-            outtake.setPressureStanga(Variables.pressureStangaClose);
-        } else if(!GAMEPAD1.b.toggle) {
-            outtake.setPressureDreapta(Variables.pressureDreaptaClose);
-            outtake.setPressureStanga(Variables.pressureStangaClose);
+
+    private void scoring() {
+        if(GAMEPAD1.right_bumper.toggle) {
+            scoring.setPressure(UniversalValues.pressure_close);
+        } else if(!GAMEPAD1.right_bumper.toggle) {
+            scoring.setPressure(UniversalValues.pressure_open);
         }
-        pressureClosed = true;
-        if(GAMEPAD2.left_bumper.value) {
-            if( outtake.pressureStanga.getPosition() != Variables.pressureStangaClose) {
-                outtake.setPressureStanga(Variables.pressureStangaClose);
-
-            } else if(outtake.pressureStanga.getPosition() != Variables.pressureStangaOpen) {
-                outtake.setPressureStanga(Variables.pressureStangaOpen);
-            }
-        } else if(GAMEPAD2.right_bumper.value) {
-            if (outtake.pressureDreapta.getPosition() != Variables.pressureDreaptaClose) {
-                outtake.setPressureDreapta(Variables.pressureDreaptaClose);
-
-            } else if (outtake.pressureDreapta.getPosition() != Variables.pressureDreaptaOpen) {
-                outtake.setPressureDreapta(Variables.pressureDreaptaOpen);
-            }
-        }
-
     }
-    private void glisiera() {
-        powers = outtake.calculatePower();
-        if(GAMEPAD2.a.value) {
-            reqState = STATES.LOW;
+    //outake with state machine
+    public void outake() {
+        // d2 chose what where he wants the slides to be
+        // d2
+        if(GAMEPAD2.y.value) {
+            reqState = statesOuttake.HIGH;
         } else if(GAMEPAD2.b.value) {
-            reqState = STATES.MID;
-        } else if(GAMEPAD2.y.value) {
-            reqState = STATES.HIGH;
+            reqState = statesOuttake.MID;
+        } else if(GAMEPAD2.a.value) {
+            reqState = statesOuttake.LOW;
         }
-        if(GAMEPAD1.left_bumper.toggle && reqState != null) {
+        // Here comes the hard part
+        // In every case it first checks if the states it s comming from is FAULT
+        // If yes then he starts the sequance for it to go in a position form DEFAULT
+        // Else it just goes
+        //d1
+        if(GAMEPAD1.y.toggle && reqState != null && sequenceState == statesSequence.DONE) {
             switch (reqState) {
                 case LOW:
-                    outtake.setPosition(Variables.glisieraLow);
-                    reqState = null;
-                    robotState = STATES.LOW;
+                    glisieraTargetPos = UniversalValues.GLISIERA_LOW;
+                    if(outtakeState == statesOuttake.DEFAULT) {
+                        sequenceState = statesSequence.WAITING1;
+                    } else {
+                        glisieraOutake.setPosition(glisieraTargetPos);
+                        scoring.setBrat(UniversalValues.bratSus);
+                        scoring.setPivot(UniversalValues.pivotSus);
+                    }
+                    timer.reset();
                     break;
                 case MID:
-                    outtake.setPosition(Variables.glisieraMid);
-                    reqState = null;
-                    robotState = STATES.MID;
+                    glisieraTargetPos = UniversalValues.GLISIERA_MID;
+                    if(outtakeState == statesOuttake.DEFAULT) {
+                        sequenceState = statesSequence.WAITING1;
+                    } else {
+                        glisieraOutake.setPosition(glisieraTargetPos);
+                        scoring.setBrat(UniversalValues.bratSus);
+                        scoring.setPivot(UniversalValues.pivotSus);
+                    }
+                    timer.reset();
                     break;
                 case HIGH:
-                    outtake.setPosition(Variables.glisieraHigh);
-                    reqState = null;
-                    robotState = STATES.HIGH;
+                    glisieraTargetPos = UniversalValues.GLISIERA_HIGH;
+                    if(outtakeState == statesOuttake.DEFAULT) {
+                        sequenceState = statesSequence.WAITING1;
+                    } else {
+                        glisieraOutake.setPosition(glisieraTargetPos);
+                        scoring.setBrat(UniversalValues.bratSus);
+                        scoring.setPivot(UniversalValues.pivotSus);
+                    }
+                    timer.reset();
+                    break;
             }
-        } else if(!GAMEPAD1.left_bumper.toggle && robotState != STATES.DEFAULT) {
-            outtake.setPosition(0);
-            reqState = robotState;
-            robotState = STATES.DEFAULT;
+
+        } else if(!GAMEPAD1.y.toggle && outtakeState != statesOuttake.DEFAULT && sequenceState == statesSequence.DONE) {
+            reqState = statesOuttake.DEFAULT;
+            sequenceState = statesSequence.WAITING1;
+            timer.reset();
         }
 
-        outtake.glisieraStanga.setPower(powers[0]);
-        outtake.glisieraDreapta.setPower(powers[1]);
-    }
+        if(reqState == statesOuttake.DEFAULT && outtakeState != statesOuttake.DEFAULT && sequenceState != statesSequence.DONE) {{
+                switch (sequenceState){
+                    case WAITING1:
+                        scoring.setPivot(UniversalValues.pivotJos);
+                        scoring.setBrat(0.1);
+                        scoring.setTiwst(UniversalValues.twistDef);
+                        intake.setIntakePos(500);
+                        sequenceState = statesSequence.WAITING2;
+                        break;
 
-    public void brat() {
-        if(GAMEPAD1.a.toggle) {
-            outtake.setBrat(Variables.bratSus);
-            outtake.setClaw(Variables.pivotSus);
-        } else if(!GAMEPAD1.a.toggle) {
-            outtake.setClaw(Variables.pivotJos);
-            outtake.setBrat(Variables.bratJos);
+                    case WAITING2:
+                        if(timer.milliseconds() > 400) {
+                            glisieraOutake.setPosition(UniversalValues.GLISIERA_DEFAULT);
+                            sequenceState = statesSequence.WAITING3;
+                        }
+                        break;
+                    case WAITING3:
+                        if(timer.milliseconds() > 700) {
+                            scoring.setBrat(UniversalValues.bratJos);
+                            sequenceState = statesSequence.DONE;
+                            reqState = outtakeState;
+                            outtakeState = statesOuttake.DEFAULT;
+                            intake.setIntakePos(0);
+                        }
+                        break;
+
+                }
+            }
+        }
+        if(outtakeState == statesOuttake.DEFAULT && reqState != null && sequenceState != statesSequence.DONE) {
+            switch (sequenceState) {
+                case WAITING1:
+                    scoring.setBrat(UniversalValues.bratIntermediary);
+                    sequenceState = statesSequence.WAITING2;
+                    break;
+                case WAITING2:
+                    if(timer.milliseconds() > 200) {
+                        intake.setIntakePos(1000);
+                        sequenceState = statesSequence.WAITING3;
+                    }
+                    break;
+                case WAITING3:
+                        scoring.setPivot(UniversalValues.pivotIntermediary);
+                        sequenceState = statesSequence.WAITING4;
+
+                    break;
+                case WAITING4:
+                    if (timer.milliseconds() > 500) {
+                        glisieraOutake.setPosition(glisieraTargetPos);
+                        sequenceState = statesSequence.WAITING5;
+                    }
+                    break;
+                case WAITING5:
+                    if(timer.milliseconds() > 1000) {
+                        scoring.setBrat(UniversalValues.bratSus);
+                        scoring.setPivot(UniversalValues.pivotSus);
+                        scoring.setTiwst(UniversalValues.twistScore);
+                        outtakeState = reqState;
+                        reqState = null;
+                        sequenceState = statesSequence.DONE;
+                    }
+                    break;
+            }
         }
     }
+    private void pivot() {
 
-    enum STATES {
+    }
+    public void updateControlLoops () {
+        glisieraOutake.updateControlLoop();
+        intake.updateControlLoop();
+    }
+    private void driveControl() {
+        if(GAMEPAD1.right_bumper.value) {
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            GAMEPAD1.left_stick_y * 0.3,
+                            -GAMEPAD1.left_stick_x  * 0.3,
+                            -GAMEPAD1.right_stick_x  * 0.3
+                    )
+            );
+        } else {
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            GAMEPAD1.left_stick_y,
+                            -GAMEPAD1.left_stick_x,
+                            -GAMEPAD1.right_stick_x
+                    )
+            );
+        } if(((GAMEPAD1.left_stick_y > 0.3 || GAMEPAD1.left_stick_x > 0.3) || (GAMEPAD1.left_stick_y < -0.3 || GAMEPAD1.left_stick_x <-0.3)) && outtakeState == statesOuttake.DEFAULT && sequenceState == statesSequence.DONE) {
+            scoring.setBrat(0.15);
+        } else if(((GAMEPAD1.left_stick_y < 0.3 || GAMEPAD1.left_stick_x < 0.3) || (GAMEPAD1.left_stick_y > -0.3 || GAMEPAD1.left_stick_x <-0.3)) && outtakeState == statesOuttake.DEFAULT && sequenceState == statesSequence.DONE) {
+            scoring.setBrat(UniversalValues.bratJos);
+        }
+        drive.update();
+    }
+
+    private void telemetry() {
+        telemetry.addData("seqanceState", sequenceState);
+        telemetry.addData("glisieraState", outtakeState);
+        telemetry.addData("reqState", reqState);
+        telemetry.addData("glisieraTargetPos", glisieraTargetPos);
+        telemetry.addData("timer", timer.milliseconds());
+        telemetry.update();
+    }
+
+    enum statesOuttake {
         DEFAULT,
         LOW,
         MID,
         HIGH
+    }
+    enum statesSequence {
+        DONE,
+        WAITING1,
+        WAITING2,
+        WAITING3,
+        WAITING4,
+        WAITING5,
     }
 }

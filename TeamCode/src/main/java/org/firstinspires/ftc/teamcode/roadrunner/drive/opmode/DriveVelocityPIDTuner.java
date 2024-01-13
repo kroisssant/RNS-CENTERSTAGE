@@ -21,8 +21,9 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robots.subSystems.OutTake;
-import org.firstinspires.ftc.teamcode.robots.subSystems.Variables;
+import org.firstinspires.ftc.teamcode.robots.constatns.UniversalValues;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.robots.subSystems.ScoringSubsystem;
 
 import java.util.List;
 
@@ -53,9 +54,11 @@ import java.util.List;
 @Config
 @Autonomous(group = "drive")
 public class DriveVelocityPIDTuner extends LinearOpMode {
+    IntakeSubsystem intake;
+    ScoringSubsystem outake;
     public static double DISTANCE = 72; // in
 
-    OutTake outTake;
+    // OutTake outTake;
 
     enum Mode {
         DRIVER_MODE,
@@ -63,6 +66,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
     }
 
     private static MotionProfile generateProfile(boolean movingForward) {
+
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
         MotionState goal = new MotionState(movingForward ? DISTANCE : 0, 0, 0, 0);
         return MotionProfileGenerator.generateSimpleMotionProfile(start, goal, MAX_VEL, MAX_ACCEL);
@@ -70,9 +74,11 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        outTake = new OutTake(hardwareMap);
-        outTake.setBrat(Variables.bratJos);
-        outTake.setClaw(Variables.pivotJos);
+        outake = new ScoringSubsystem(hardwareMap);
+        intake = new IntakeSubsystem(hardwareMap);
+        outake.setBrat(0.15);
+        intake.setIntakePos(0);
+        intake.setDropdown(UniversalValues.DROPDOWN_UP);
         if (!RUN_USING_ENCODER) {
             RobotLog.setGlobalErrorMsg("%s does not need to be run if the built-in motor velocity" +
                     "PID is not in use", getClass().getSimpleName());

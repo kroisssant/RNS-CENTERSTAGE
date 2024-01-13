@@ -112,7 +112,7 @@ public class HSVPipelineAuto extends OpenCvPipeline {
         System.out.println("isRight" + isRight);
         System.out.println("isLeft" + isLeft);
         System.out.println("isCenter" + isCenter);
-        if(isLeft){
+        if(isLeft && color != 2){
             caz = 2;
 
             Imgproc.rectangle(
@@ -124,17 +124,17 @@ public class HSVPipelineAuto extends OpenCvPipeline {
             caz = 3;
 
             Imgproc.rectangle(
-                input,
-                right_roi,
-                new Scalar(0, 255, 0)
+                    input,
+                    right_roi,
+                    new Scalar(0, 255, 0)
             );
         } else if(isCenter){
             caz = 1;
 
             Imgproc.rectangle(
-                input,
-                center_roi,
-                new Scalar(0, 255, 0)
+                    input,
+                    center_roi,
+                    new Scalar(0, 255, 0)
             );
         }
         else {
@@ -142,7 +142,7 @@ public class HSVPipelineAuto extends OpenCvPipeline {
                 caz = 2;
             }
             if(Color == 2) {
-                caz = 3;
+                caz = 2;
             }
 
         }
