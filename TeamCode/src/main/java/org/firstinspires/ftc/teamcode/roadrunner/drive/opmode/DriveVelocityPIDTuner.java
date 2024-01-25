@@ -76,6 +76,8 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
     public void runOpMode() {
         outake = new ScoringSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
+        outake.setTiwst(UniversalValues.twistDef);
+        outake.setPressure(0.15);
         outake.setBrat(0.15);
         intake.setIntakePos(0);
         intake.setDropdown(UniversalValues.DROPDOWN_UP);

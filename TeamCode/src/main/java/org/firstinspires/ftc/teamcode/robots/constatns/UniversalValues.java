@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 public class UniversalValues {
     // INTAKE
     public static double DROPDOWN_UP = 0;
-    public static double DROPDOWN_DOWN = 0.42;
+    public static double DROPDOWN_DOWN = 0.6;
     public static int GLISIERA_INTAKE_FORWARD = 0;
     public static int GLISIERA_INTAKE_DEFAULT = 0;
     public static double INTAKE_POW = 1;
@@ -21,7 +21,7 @@ public class UniversalValues {
     public static double bratIntermediary = 0.15;
     public static double pivotJos = 0.1;
     public static double pivotSus = 0.5;
-    public static double pivotIntermediary = 0.1;
+    public static double pivotIntermediary = 0.93;
     public static double twistDef = 0;
     public static double twistScore = 0.37;
     public static double pressure_close = 0.7;

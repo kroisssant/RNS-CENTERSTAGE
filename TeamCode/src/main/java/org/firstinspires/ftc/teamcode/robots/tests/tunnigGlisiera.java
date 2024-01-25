@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeSubsystem;
 
-public class tunnigGlisiera extends LinearOpMode {
+public class  tunnigGlisiera extends LinearOpMode {
     IntakeSubsystem intake;
     @Override
     public void runOpMode() throws InterruptedException {

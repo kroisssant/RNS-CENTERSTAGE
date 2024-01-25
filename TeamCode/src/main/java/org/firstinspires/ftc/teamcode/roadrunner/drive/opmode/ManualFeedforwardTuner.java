@@ -24,6 +24,9 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robots.constatns.UniversalValues;
+import org.firstinspires.ftc.teamcode.robots.subSystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.robots.subSystems.ScoringSubsystem;
 
 import java.util.Objects;
 
@@ -66,6 +69,13 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        ScoringSubsystem outake = new ScoringSubsystem(hardwareMap);
+        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap);
+        outake.setTiwst(UniversalValues.twistDef);
+        outake.setPressure(0.15);
+        outake.setBrat(0.15);
+        intake.setIntakePos(0);
+        intake.setDropdown(UniversalValues.DROPDOWN_UP);
         if (RUN_USING_ENCODER) {
             RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
                     "when using the built-in drive motor velocity PID.");

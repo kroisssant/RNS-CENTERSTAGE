@@ -42,6 +42,7 @@ public class teleop extends LinearOpMode {
         scoring.setBrat(UniversalValues.bratJos);
         scoring.setTiwst(UniversalValues.twistDef);
         scoring.setPivot(UniversalValues.pivotJos);
+        intake.setIntakePos(0);
         timer = new ElapsedTime();
 
         waitForStart();
@@ -78,11 +79,11 @@ public class teleop extends LinearOpMode {
             intake.setDropdown(UniversalValues.DROPDOWN_UP);
         }
 
-        if(GAMEPAD2.dpad_up.toggle) {
-            intake.setIntakePos(UniversalValues.GLISIERA_INTAKE_FORWARD);
-        } else if(!GAMEPAD2.dpad_up.toggle) {
-            intake.setIntakePos(UniversalValues.GLISIERA_INTAKE_DEFAULT);
-        }
+//        if(GAMEPAD2.dpad_up.toggle) {
+//            intake.setIntakePos(UniversalValues.GLISIERA_INTAKE_FORWARD);
+//        } else if(!GAMEPAD2.dpad_up.toggle) {
+//            intake.setIntakePos(UniversalValues.GLISIERA_INTAKE_DEFAULT);
+//        }
     }
 
     private void scoring() {
@@ -154,21 +155,25 @@ public class teleop extends LinearOpMode {
         if(reqState == statesOuttake.DEFAULT && outtakeState != statesOuttake.DEFAULT && sequenceState != statesSequence.DONE) {{
                 switch (sequenceState){
                     case WAITING1:
-                        scoring.setPivot(UniversalValues.pivotJos);
-                        scoring.setBrat(0.1);
-                        scoring.setTiwst(UniversalValues.twistDef);
                         intake.setIntakePos(500);
-                        sequenceState = statesSequence.WAITING2;
-                        break;
-
                     case WAITING2:
-                        if(timer.milliseconds() > 400) {
-                            glisieraOutake.setPosition(UniversalValues.GLISIERA_DEFAULT);
+                        if(timer.milliseconds() > 1000) {
+                            scoring.setPivot(UniversalValues.pivotJos);
+                            scoring.setBrat(0.1);
+                            scoring.setTiwst(UniversalValues.twistDef);
                             sequenceState = statesSequence.WAITING3;
                         }
+
                         break;
+
                     case WAITING3:
-                        if(timer.milliseconds() > 700) {
+                        if(timer.milliseconds() > 1400) {
+                            glisieraOutake.setPosition(UniversalValues.GLISIERA_DEFAULT);
+                            sequenceState = statesSequence.WAITING4;
+                        }
+                        break;
+                    case WAITING4:
+                        if(timer.milliseconds() > 2000) {
                             scoring.setBrat(UniversalValues.bratJos);
                             sequenceState = statesSequence.DONE;
                             reqState = outtakeState;
@@ -193,6 +198,7 @@ public class teleop extends LinearOpMode {
                     }
                     break;
                 case WAITING3:
+                    if(timer.milliseconds() > 1000)
                         scoring.setPivot(UniversalValues.pivotIntermediary);
                         sequenceState = statesSequence.WAITING4;
 
@@ -216,9 +222,6 @@ public class teleop extends LinearOpMode {
             }
         }
     }
-    private void pivot() {
-
-    }
     public void updateControlLoops () {
         glisieraOutake.updateControlLoop();
         intake.updateControlLoop();
@@ -240,9 +243,9 @@ public class teleop extends LinearOpMode {
                             -GAMEPAD1.right_stick_x
                     )
             );
-        } if(((GAMEPAD1.left_stick_y > 0.3 || GAMEPAD1.left_stick_x > 0.3) || (GAMEPAD1.left_stick_y < -0.3 || GAMEPAD1.left_stick_x <-0.3)) && outtakeState == statesOuttake.DEFAULT && sequenceState == statesSequence.DONE) {
+        } if(((GAMEPAD1.left_stick_y > 0.3 || GAMEPAD1.left_stick_x > 0.3) || (GAMEPAD1.left_stick_y < -0.3 || GAMEPAD1.left_stick_x <-0.3)) && outtakeState == statesOuttake.DEFAULT && sequenceState == statesSequence.DONE && (GAMEPAD1.left_trigger < 0.3) && GAMEPAD1.right_trigger < 0.3 && !GAMEPAD1.left_bumper.value) {
             scoring.setBrat(0.15);
-        } else if(((GAMEPAD1.left_stick_y < 0.3 || GAMEPAD1.left_stick_x < 0.3) || (GAMEPAD1.left_stick_y > -0.3 || GAMEPAD1.left_stick_x <-0.3)) && outtakeState == statesOuttake.DEFAULT && sequenceState == statesSequence.DONE) {
+        } else if(((GAMEPAD1.left_stick_y < 0.3 || GAMEPAD1.left_stick_x < 0.3) || (GAMEPAD1.left_stick_y > -0.3 || GAMEPAD1.left_stick_x <-0.3)) && outtakeState == statesOuttake.DEFAULT && sequenceState == statesSequence.DONE && (GAMEPAD1.left_trigger < 0.3) && GAMEPAD1.right_trigger < 0.3 && !GAMEPAD1.left_bumper.value) {
             scoring.setBrat(UniversalValues.bratJos);
         }
         drive.update();

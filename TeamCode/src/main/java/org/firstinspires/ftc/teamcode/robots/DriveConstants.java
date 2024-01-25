@@ -39,7 +39,7 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = true;
+    public static final boolean RUN_USING_ENCODER = false;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25 , 0, 10, 13);
 
     //  THIS ARE FOR FTCLIB RAMSETE CONTROLLER
@@ -56,7 +56,7 @@ public class DriveConstants {
     public static double WHEEL_RADIUS = 1.88; // in
     public static double WHEEL_DIAMETER = WHEEL_RADIUS * 2;
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 8.46; // in
+    public static double TRACK_WIDTH = 8.54; // in
 
     // FTCLIB
     public static double DISTANCE_PER_PULSE = WHEEL_DIAMETER * Math.PI / TICKS_PER_REV;
@@ -67,8 +67,8 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0;
+    public static double kV = 0.0076;
+    public static double kA = 0.002;
     public static double kStatic = 0;
 
     // Drivetrain.class constants
@@ -84,7 +84,7 @@ public class DriveConstants {
      */
 
     // MAX_VEL AND MAX_ACCEL ARE USED AS MAX_VELOCITY AND MAX_ACCELEATION IN FTCLIB
-    public static double MAX_VEL =50;
+    public static double MAX_VEL =80;
     public static double MAX_ACCEL = 60;
     public static double MAX_ANG_VEL = Math.toRadians(270);
     public static double MAX_ANG_ACCEL = Math.toRadians(270);

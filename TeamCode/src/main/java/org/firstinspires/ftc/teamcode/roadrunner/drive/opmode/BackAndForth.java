@@ -37,12 +37,11 @@ public class BackAndForth extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-//        outTake = new OutTake(hardwareMap);
-//        outTake.setBrat(Variables.bratJos);
-//        outTake.setClaw(Variables.pivotJos-0.1);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         outake = new ScoringSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
+        outake.setTiwst(UniversalValues.twistDef);
+        outake.setPressure(0.15);
         outake.setBrat(0.15);
         intake.setIntakePos(0);
         intake.setDropdown(UniversalValues.DROPDOWN_UP);

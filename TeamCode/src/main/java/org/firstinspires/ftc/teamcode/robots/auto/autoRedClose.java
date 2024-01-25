@@ -28,22 +28,28 @@ public class autoRedClose extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         pipeline = new HSVPipelineAuto(2);
-        // initOpenCV();
+        initOpenCV();
         drive = new SampleMecanumDrive(hardwareMap);
         outake = new ScoringSubsystem(hardwareMap);
         glisiera = new GlisieraSubsystem(hardwareMap, this.telemetry);
         intake = new IntakeSubsystem(hardwareMap);
 
         Trajectory toMovCenter = drive.trajectoryBuilder(new Pose2d(0, 0, Math.toRadians(0)))
-                .lineToConstantHeading(new Vector2d(29, 0)).build();
+                .lineToConstantHeading(new Vector2d(-24, 0)).build();
         Trajectory backCenter = drive.trajectoryBuilder(toMovCenter.end())
-                .lineToLinearHeading(new Pose2d(20, 0, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(0.5, -6, Math.toRadians(-90)))
                 .build();
-        Trajectory centerToBackBoard = drive.trajectoryBuilder(backCenter.end())
-                .lineToLinearHeading(new Pose2d(28, -40, Math.toRadians(90)))
+        TrajectorySequence centerToBackBoard = drive.trajectorySequenceBuilder(backCenter.end())
+                .lineToLinearHeading(new Pose2d(0.5, -5, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(-24, 29, Math.toRadians(-90)))
                 .build();
         TrajectorySequence centerToStackMid = drive.trajectorySequenceBuilder(centerToBackBoard.end())
-                .lineToLinearHeading(new Pose2d(40, -20, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-40, -6, Math.toRadians(-90)))
+                .addSpatialMarker(new Vector2d(-35, -5), () -> {
+                    intake.setDropdown(UniversalValues.DROPDOWN_DOWN);
+                })
+
+                .lineToLinearHeading(new Pose2d(-47, -46, Math.toRadians(-90)))
                 .build();
         TrajectorySequence centerStackToBackbordMid1 = drive.trajectorySequenceBuilder(centerToStackMid.end())
                 .setTangent(0)
@@ -77,30 +83,44 @@ public class autoRedClose extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(0, -40, Math.toRadians(90)))
                 .build();
         outake.setPressure(UniversalValues.pressure_close);
-        outake.setBrat(0.15);
-        outake.setPivot(UniversalValues.pivotJos);
+        outake.setBrat(UniversalValues.bratJos + 0.01);
+        outake.setPivot(UniversalValues.pivotJos + 0.01);
         outake.setTiwst(UniversalValues.twistDef);
         intake.setDropdown(UniversalValues.DROPDOWN_UP);
-        while(!opModeIsActive() && !isStopRequested()) {
+//        while(!opModeIsActive() && !isStopRequested()) {
 //            caz = pipeline.getCaz();
 //            telemetry.addData("caz", caz);
 //            telemetry.update();
-        }
+//        }
         waitForStart();
         if(caz == 1) {
             intake.setIntakePower(0.2);
             drive.followTrajectory(toMovCenter);
             sleep(500);
             drive.followTrajectory(backCenter);
-            drive.followTrajectory(centerToBackBoard);
-            outake.setBrat(UniversalValues.bratIntermediary);
+            intake.setDropdown(0.65);
             sleep(200);
+            intake.setIntakePos(2500);
+            intake.setIntakeMobilPower(1);
+            intake.setIntakePower(-1);
+            outake.setPressure(UniversalValues.pressure_open);
+            sleep(2400);
+            intake.setIntakePos(0);
+            intake.setIntakeMobilPower(0.5);
+            sleep(2000);
+            outake.setPressure(UniversalValues.pressure_close);
+            sleep(1000);
+            intake.setDropdown(UniversalValues.DROPDOWN_UP);
+            drive.followTrajectorySequence(centerToBackBoard);
+            intake.setIntakePower(0);
+            intake.setIntakeMobilPower(0);
             intake.setIntakePos(1000);
-            outake.setPivot(UniversalValues.pivotIntermediary);
-            glisiera.setPosition(100);
+            sleep(200);
+            glisiera.setPosition(300);
             sleep(500);
             outake.setBrat(UniversalValues.bratSus);
-            outake.setPivot(UniversalValues.pivotSus);
+            sleep(300);
+            outake.setPivot(UniversalValues.pivotSus-0.1);
             outake.setTiwst(UniversalValues.twistScore);
             sleep(2000);
             outake.setPressure(UniversalValues.pressure_open);
@@ -112,31 +132,34 @@ public class autoRedClose extends LinearOpMode {
             sleep(600);
             glisiera.setPosition(UniversalValues.GLISIERA_DEFAULT);
             outake.setBrat(UniversalValues.bratJos);
-            sleep(500);
-            drive.followTrajectorySequence(centerToStackMid);
-            intake.setIntakePos(2400);
-            intake.setStackBlocker(UniversalValues.STACKBLOCKER_DOWN);
-            intake.setDropdown(UniversalValues.DROPDOWN_DOWN + 0.5);
-            intake.setIntakeMobilPower(UniversalValues.INTAKE_MOBIL_POW);
-            intake.setIntakePower(UniversalValues.INTAKE_POW);
-            sleep(2000);
             intake.setIntakePos(0);
-            sleep(1000);
-            outake.setPressure(UniversalValues.pressure_close);
-            intake.setIntakeMobilPower(0);
-            intake.setIntakePower(0);
+            sleep(100);
+            outake.setBrat(0.13);
+            drive.followTrajectorySequence(centerToStackMid);
+            outake.setBrat(UniversalValues.bratJos);
+            intake.setDropdown(0.4);
+            intake.setIntakePos(2500);
+            intake.setIntakeMobilPower(1);
+            intake.setIntakePower(-1);
+            outake.setPressure(UniversalValues.pressure_open);
+            sleep(2400);
+            intake.setIntakePos(2300);
+            sleep(400);
+            intake.setDropdown(UniversalValues.DROPDOWN_DOWN);
+            sleep(200);
+            intake.setIntakePos(0);
+            intake.setIntakeMobilPower(0.5);
             sleep(2000);
-            drive.followTrajectorySequence(centerStackToBackbordMid1);
+            outake.setPressure(UniversalValues.pressure_close);
+            sleep(1000);
 
-//            intake.setIntakePos(0);
-//            drive.followTrajectorySequence(cetnerPark);
             sleep(30000);
 
 
         } else if(caz == 3) {
             intake.setIntakePower(0.2);
             drive.followTrajectory(toMovFar);
-            intake.setIntakePower(0.3);sleep(500);
+            sleep(500);
             drive.followTrajectory(toBackboardFar);
             outake.setBrat(UniversalValues.bratIntermediary);
             sleep(200);
@@ -157,7 +180,7 @@ public class autoRedClose extends LinearOpMode {
             sleep(600);
             glisiera.setPosition(UniversalValues.GLISIERA_DEFAULT);
             outake.setBrat(UniversalValues.bratJos);
-//            intake.setIntakePos(0);
+            intake.setIntakePos(0);
 //            drive.followTrajectorySequence(farPark);
             sleep(30000);
         } else if (caz == 2) {
@@ -185,7 +208,7 @@ public class autoRedClose extends LinearOpMode {
             sleep(600);
             glisiera.setPosition(UniversalValues.GLISIERA_DEFAULT);
             outake.setBrat(UniversalValues.bratJos);
-//            intake.setIntakePos(0);
+            intake.setIntakePos(0);
 //            drive.followTrajectorySequence(closePark);
             sleep(30000);
         }

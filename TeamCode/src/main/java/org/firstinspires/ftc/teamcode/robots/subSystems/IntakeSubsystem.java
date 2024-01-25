@@ -34,8 +34,7 @@ public class IntakeSubsystem {
         intakeMobil.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         dropdown = hardwareMap.get(Servo.class, "dropdown");
-
-        stackBlocker = hardwareMap.get(Servo.class, "stackBlocker");
+        dropdown.setDirection(Servo.Direction.REVERSE);
     }
 
     public void setDropdown(double pos) {
