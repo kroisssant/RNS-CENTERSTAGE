@@ -32,24 +32,24 @@ public class GlisieraSubsystem {
 
     }
     public void setPosition(int ticks) {
-//        glisieraFeedforward = new FeedforwardController() {
-//            @Override
-//            public double calculate(double x, double v, double a) {
-//                return SubsystemConstants.kV * v + SubsystemConstants.kA * a;
-//            }
-//        };
-//        WPILibMotionProfile.Constraints constraints =
-//                new WPILibMotionProfile.Constraints(SubsystemConstants.MAX_VEL_GLISIERA, SubsystemConstants.MAX_ACCEL_GLISIERA);
-//        WPILibMotionProfile.State goal =
-//                new WPILibMotionProfile.State(ticks, 0);
-//        WPILibMotionProfile.State initial =
-//                new WPILibMotionProfile.State(glisieraRight.getCurrentPosition(), glisieraRight.getVelocity());
-//        motionProfile =
-//                new WPILibMotionProfile(constraints, goal, initial);
-//        glisieraP = new PController(SubsystemConstants.kP);
-//        timer.reset();
-//        lastVelocity = 0;
-//        lastTime = 0;
+       glisieraFeedforward = new FeedforwardController() {
+           @Override
+           public double calculate(double x, double v, double a) {
+               return SubsystemConstants.kV * v + SubsystemConstants.kA * a;
+           }
+       };
+       WPILibMotionProfile.Constraints constraints =
+               new WPILibMotionProfile.Constraints(SubsystemConstants.MAX_VEL_GLISIERA, SubsystemConstants.MAX_ACCEL_GLISIERA);
+       WPILibMotionProfile.State goal =
+               new WPILibMotionProfile.State(ticks, 0);
+       WPILibMotionProfile.State initial =
+               new WPILibMotionProfile.State(glisieraRight.getCurrentPosition(), glisieraRight.getVelocity());
+       motionProfile =
+               new WPILibMotionProfile(constraints, goal, initial);
+       glisieraP = new PController(SubsystemConstants.kP);
+       timer.reset();
+       lastVelocity = 0;
+       lastTime = 0;
         glisieraRight.setTargetPosition(ticks);
         glisieraRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         glisieraRight.setPower(1);
