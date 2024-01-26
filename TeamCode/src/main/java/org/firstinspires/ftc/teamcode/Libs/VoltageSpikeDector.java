@@ -15,8 +15,6 @@ public class VoltageSpikeDector {
 
     }
     public boolean detect(double current) {
-        // Simulating voltage readings (replace this with actual sensor readings)
-
         // Initialize EMA with the initial voltage reading
         this.current = current;
         ema = current;
